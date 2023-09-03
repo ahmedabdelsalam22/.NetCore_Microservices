@@ -31,20 +31,19 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-SeedingDb();
+//SeedingDb();
 
 app.Run();
 
 
-// 
-void SeedingDb()
-{
-    using (var scope = app.Services.CreateScope()) 
-    {
-        var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
-        if (_db.Database.GetPendingMigrations().Count() > 0) 
-        {
-            _db.Database.Migrate();
-        }
-    }
-}
+//void SeedingDb()
+//{
+//    using (var scope = app.Services.CreateScope()) 
+//    {
+//        var _db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+//        if (_db.Database.GetPendingMigrations().Count() > 0) 
+//        {
+//            _db.Database.Migrate();
+//        }
+//    }
+//}
