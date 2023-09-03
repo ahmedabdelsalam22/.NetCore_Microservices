@@ -1,0 +1,43 @@
+﻿using Mango.Services.CouponAPI.Data;
+using Mango.Services.CouponAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
+namespace Mango.Services.CouponAPI.Repository
+{
+    public class Repository<T> : IRepository<T> where T : class
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _dbSet;
+        public Repository(ApplicationDbContext context)
+        {
+            _context = context;
+            _dbSet = _context.Set<T>();
+        }
+        public async Task Create(T entity)
+        {
+            await _dbSet.AddAsync(entity);
+        }
+
+        public void Delete(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public Task<T> Get(Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _dbSet;
+            if (filter != null) 
+            {
+                query = query.Where(filter);
+            }
+            return query.FirstOrDefaultAsync();
+        }
+
+        public Task<List<T>> GetAll()
+        {
+            IQueryable<T> query = _dbSet;
+            return query.ToListAsync();
+        }
+    }
+}
