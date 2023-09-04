@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Mango.Services.CouponAPI.Models
+namespace Mango.Web.Models
 {
     public class ResponseDTO
     {
