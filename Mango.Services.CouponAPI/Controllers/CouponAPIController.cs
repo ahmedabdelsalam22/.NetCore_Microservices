@@ -77,6 +77,34 @@ namespace Mango.Services.CouponAPI.Controllers
                 apiResponse.ErrorMessage = new List<string>() { ex.Message };
                 return apiResponse;
             }
+        } 
+        [HttpGet("couponCode/{couponCode}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> GetCouponByCouponCode(string? couponCode) 
+        {
+            try
+            {
+                Coupon coupon = await unitOfWork.couponRepository.Get(tracked: false, filter:x=>x.CouponCode.ToLower() == couponCode.ToLower());
+                if (coupon == null)
+                {
+                    return NotFound();
+                }
+                CouponDTO couponDTO = mapper.Map<CouponDTO>(coupon);
+
+                apiResponse.IsSuccess = true;
+                apiResponse.StatusCode = HttpStatusCode.OK;
+                apiResponse.Result = couponDTO;
+                return apiResponse;
+            }
+            catch (Exception ex) 
+            {
+                apiResponse.IsSuccess = false;
+                apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                apiResponse.ErrorMessage = new List<string>() { ex.Message };
+                return apiResponse;
+            }
         }
 
         [HttpPost("create")]
