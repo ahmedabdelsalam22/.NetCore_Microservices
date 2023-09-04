@@ -14,11 +14,11 @@ namespace Mango.Services.CouponAPI.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly APIResponse apiResponse;
-        public CouponAPIController(IUnitOfWork unitOfWork,IMapper mapper, APIResponse apiResponse)
+        public CouponAPIController(IUnitOfWork unitOfWork,IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.apiResponse = apiResponse;
+            this.apiResponse = new APIResponse();
         }
 
         [HttpGet("coupons")]
