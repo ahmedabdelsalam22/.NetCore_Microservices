@@ -10,6 +10,7 @@
             <th>CouponCode</th>
             <th>DiscountAmount</th>
             <th>MinAmount</th>
+            <th>Delete</th>
         </tr>
     </thead>
 
@@ -19,8 +20,11 @@
             <tr>
                 <td>@n.CouponId</td>
                 <td>@n.CouponCode</td>
-                <td>@n.DiscountAmount</td>
-                <td>@n.MinAmount</td>
+                <td>@n.DiscountAmount$</td>
+                <td>@n.MinAmount$</td>
+                <td>
+                    <button type="submit" class="btn-danger">Delete</button>
+                </td>
             </tr>
         }
     </tbody>
