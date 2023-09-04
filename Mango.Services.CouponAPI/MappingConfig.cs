@@ -1,10 +1,14 @@
-﻿namespace Mango.Services.CouponAPI
+﻿using AutoMapper;
+using Mango.Services.CouponAPI.Models;
+using Mango.Services.CouponAPI.Models.DTOS;
+
+namespace Mango.Services.CouponAPI
 {
-    public class MappingConfig
+    public class MappingConfig : Profile
     {
         public MappingConfig()
         {
-            
+            CreateMap<Coupon, CouponDTO>();
         }
     }
 }
