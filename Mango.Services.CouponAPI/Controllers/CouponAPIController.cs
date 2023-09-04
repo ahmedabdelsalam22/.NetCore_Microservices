@@ -79,5 +79,25 @@ namespace Mango.Services.CouponAPI.Controllers
             }
         }
 
+        [HttpPost("create")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> CreateCoupon([FromBody] CouponCreateDTO couponCreateDTO)
+        {
+            if (couponCreateDTO == null) 
+            {
+                return BadRequest();
+            }
+            Coupon couponIsExists = await unitOfWork.couponRepository.Get(tracked:false,filter:x=>x.CouponCode.ToLower() == couponCreateDTO.CouponCode.ToLower());
+            if (couponIsExists != null) 
+            {
+                return BadRequest();
+            }
+            Coupon coupon = mapper.Map<Coupon>(couponCreateDTO);
+            await unitOfWork.couponRepository.Create(coupon);
+            await unitOfWork.Save();
+            return Ok();
+        }
     }
 }

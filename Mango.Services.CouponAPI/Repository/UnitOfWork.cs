@@ -12,5 +12,9 @@ namespace Mango.Services.CouponAPI.Repository
             couponRepository = new CouponRepository(context);
         }
         public ICouponRepository couponRepository { get; private set; }
+        public async Task Save() 
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
