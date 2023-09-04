@@ -1,0 +1,28 @@
+﻿@model IEnumerable<CouponDTO>
+@{
+    ViewData["Title"] = "CouponIndex";
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active">
+            <th>CouponId</th>
+            <th>CouponCode</th>
+            <th>DiscountAmount</th>
+            <th>MinAmount</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(CouponDTO n in Model)
+        {
+            <tr>
+                <td>@n.CouponId</td>
+                <td>@n.CouponCode</td>
+                <td>@n.DiscountAmount</td>
+                <td>@n.MinAmount</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
