@@ -24,19 +24,27 @@ namespace Mango.Services.CouponAPI.Repository
             _dbSet.Remove(entity);
         }
 
-        public Task<T> Get(Expression<Func<T, bool>>? filter = null)
+        public Task<T> Get(Expression<Func<T, bool>>? filter = null, bool tracked = true)
         {
             IQueryable<T> query = _dbSet;
             if (filter != null) 
             {
                 query = query.Where(filter);
             }
+            if (!tracked) 
+            {
+                query = query.AsNoTracking();
+            }
             return query.FirstOrDefaultAsync();
         }
 
-        public Task<List<T>> GetAll()
+        public Task<List<T>> GetAll(bool tracked = true)
         {
             IQueryable<T> query = _dbSet;
+            if (!tracked)
+            {
+                query = query.AsNoTracking();
+            }
             return query.ToListAsync();
         }
     }

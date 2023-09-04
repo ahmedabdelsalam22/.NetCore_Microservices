@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Services.CouponAPI.Models;
+using Mango.Services.CouponAPI.Models.DTOS;
 using Mango.Services.CouponAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,20 @@ namespace Mango.Services.CouponAPI.Controllers
             this.apiResponse = apiResponse;
         }
 
+        [HttpGet("coupons")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> GetAllCoupons() 
+        {
+            List<Coupon> coupons = await unitOfWork.couponRepository.GetAll(tracked:false);
+            if (coupons == null) 
+            {
+                return NotFound();
+            }
+            List<CouponDTO> couponDTOs = mapper.Map<List<CouponDTO>>(coupons);
+            return Ok(couponDTOs);
+        }
 
     }
 }
