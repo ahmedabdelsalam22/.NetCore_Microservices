@@ -111,7 +111,6 @@ namespace Mango.Services.CouponAPI.Controllers
                 apiResponse.ErrorMessage = new List<string>() { ex.Message };
                 return apiResponse;
             }
-
         }
     }
 }
