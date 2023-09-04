@@ -9,6 +9,7 @@ namespace Mango.Services.CouponAPI
         public MappingConfig()
         {
             CreateMap<Coupon, CouponDTO>();
+            CreateMap<CouponCreateDTO, Coupon>();
         }
     }
 }

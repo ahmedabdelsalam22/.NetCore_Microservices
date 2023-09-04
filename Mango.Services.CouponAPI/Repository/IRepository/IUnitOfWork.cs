@@ -3,5 +3,6 @@
     public interface IUnitOfWork
     {
         public ICouponRepository couponRepository { get; }
+        Task Save();
     }
 }
