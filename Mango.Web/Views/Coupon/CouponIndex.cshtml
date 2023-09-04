@@ -29,7 +29,7 @@
                 <td>@n.DiscountAmount$</td>
                 <td>@n.MinAmount$</td>
                 <td>
-                    <button type="submit" class="btn-danger">Delete</button>
+                    <a type="submit" asp-action="DeleteCoupon" asp-route-couponId="@n.CouponId" class="btn-danger">Delete</a>
                 </td>
             </tr>
         }
