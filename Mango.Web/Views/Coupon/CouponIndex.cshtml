@@ -3,13 +3,20 @@
     ViewData["Title"] = "CouponIndex";
 }
 
+<div class="row m-4 text-end">
+    <div class="col-12">
+        <button type="submit" class="btn-primary" asp-action="CreateCoupon">Create Coupon</button>
+    </div>
+</div>
+
 <table class="table table-hover">
     <thead>
         <tr class="table-active">
-            <th>CouponId</th>
-            <th>CouponCode</th>
+@*            <th>CouponId</th>
+*@            <th>CouponCode</th>
             <th>DiscountAmount</th>
             <th>MinAmount</th>
+            <th>Delete</th>
         </tr>
     </thead>
 
@@ -17,10 +24,13 @@
         @foreach(CouponDTO n in Model)
         {
             <tr>
-                <td>@n.CouponId</td>
-                <td>@n.CouponCode</td>
-                <td>@n.DiscountAmount</td>
-                <td>@n.MinAmount</td>
+@*                <td>@n.CouponId</td>
+*@                <td>@n.CouponCode</td>
+                <td>@n.DiscountAmount$</td>
+                <td>@n.MinAmount$</td>
+                <td>
+                    <button type="submit" class="btn-danger">Delete</button>
+                </td>
             </tr>
         }
     </tbody>
