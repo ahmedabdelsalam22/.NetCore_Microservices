@@ -22,7 +22,7 @@ namespace Mango.Services.CouponAPI.Controllers
             this.apiResponse = new APIResponse();
         }
 
-        [HttpGet("coupon")]
+        [HttpGet("coupons")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -102,6 +102,77 @@ namespace Mango.Services.CouponAPI.Controllers
 
                 apiResponse.IsSuccess = true;
                 apiResponse.StatusCode = HttpStatusCode.Created;
+                return apiResponse;
+            }
+            catch (Exception ex)
+            {
+                apiResponse.IsSuccess = false;
+                apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                apiResponse.ErrorMessage = new List<string>() { ex.Message };
+                return apiResponse;
+            }
+        }
+        [HttpPut("update/{couponId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> UpdateCoupon(int? couponId, [FromBody] CouponUpdateDTO couponUpdateDTO)
+        {
+            try 
+            {
+                if (couponId == null || couponId == 0)
+                {
+                    return BadRequest();
+                }
+                if (couponUpdateDTO == null)
+                {
+                    return BadRequest();
+                }
+                Coupon couponIsExists = await unitOfWork.couponRepository.Get(tracked: false, filter: x => x.CouponId == couponId);
+                if (couponIsExists == null)
+                {
+                    return BadRequest();
+                }
+
+                couponUpdateDTO.CouponId = (int)couponId;
+
+                Coupon coupon = mapper.Map<Coupon>(couponUpdateDTO);
+                unitOfWork.couponRepository.Update(coupon);
+                await unitOfWork.Save();
+                apiResponse.IsSuccess = true;
+                apiResponse.StatusCode = HttpStatusCode.OK;
+                return apiResponse;
+            }
+            catch (Exception ex)
+            {
+                apiResponse.IsSuccess = false;
+                apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                apiResponse.ErrorMessage = new List<string>() { ex.Message };
+                return apiResponse;
+            }
+        }
+        [HttpDelete("delete/{couponId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<APIResponse>> DeleteCoupon(int? couponId) 
+        {
+            try 
+            {
+                if (couponId == null || couponId == 0)
+                {
+                    return BadRequest();
+                }
+                Coupon coupon = await unitOfWork.couponRepository.Get(tracked: false, filter: x => x.CouponId == couponId);
+                if (coupon == null)
+                {
+                    return NotFound();
+                }
+                unitOfWork.couponRepository.Delete(coupon);
+                await unitOfWork.Save();
+
+                apiResponse.IsSuccess = true;
+                apiResponse.StatusCode = HttpStatusCode.OK;
                 return apiResponse;
             }
             catch (Exception ex)
