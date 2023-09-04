@@ -4,6 +4,7 @@ using Mango.Services.CouponAPI.Models.DTOS;
 using Mango.Services.CouponAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
@@ -27,13 +28,27 @@ namespace Mango.Services.CouponAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> GetAllCoupons() 
         {
-            List<Coupon> coupons = await unitOfWork.couponRepository.GetAll(tracked:false);
-            if (coupons == null) 
+            try
             {
-                return NotFound();
+                List<Coupon> coupons = await unitOfWork.couponRepository.GetAll(tracked: false);
+                if (coupons == null)
+                {
+                    return NotFound();
+                }
+                List<CouponDTO> couponDTOs = mapper.Map<List<CouponDTO>>(coupons);
+
+                apiResponse.IsSuccess = true;
+                apiResponse.StatusCode = HttpStatusCode.OK;
+                apiResponse.Result = couponDTOs;
+                return apiResponse;
             }
-            List<CouponDTO> couponDTOs = mapper.Map<List<CouponDTO>>(coupons);
-            return Ok(couponDTOs);
+            catch (Exception ex) 
+            {
+                apiResponse.IsSuccess = false;
+                apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                apiResponse.ErrorMessage = new List<string>() { ex.Message };
+                return apiResponse;
+            }
         }
 
     }
