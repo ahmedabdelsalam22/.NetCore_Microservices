@@ -11,10 +11,13 @@ namespace Mango.Services.AuthAPI.Controllers
     public class AuthAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
+        private string? _secretKey;
 
-        public AuthAPIController(ApplicationDbContext context)
+        public AuthAPIController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _secretKey = configuration.GetValue<string>("");
         }
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseDTO>> Login([FromBody] LoginRequestDTO loginRequestDTO) 
