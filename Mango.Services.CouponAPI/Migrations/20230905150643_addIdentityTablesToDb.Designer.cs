@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mango.Services.CouponAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230905124153_AddIdentityTables")]
-    partial class AddIdentityTables
+    [Migration("20230905150643_addIdentityTablesToDb")]
+    partial class addIdentityTablesToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
