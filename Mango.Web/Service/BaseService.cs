@@ -1,4 +1,4 @@
-﻿using Mango.Web.Models;
+﻿using Mango.Web.Models.DTOS;
 using Mango.Web.Service.IService;
 using Newtonsoft.Json;
 using System.Net;
