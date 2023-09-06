@@ -2,6 +2,7 @@
 using Mango.Services.AuthAPI.Models.DTOS;
 using Mango.Services.AuthAPI.Service.IService;
 using Mango.Services.CouponAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -62,6 +63,21 @@ namespace Mango.Services.AuthAPI.Controllers
                 _apiResponse.ErrorMessage = ex.Message;
                 return _apiResponse;
             }
+        }
+
+        [HttpPost("assignRole")]
+        //[Authorize(Roles ="Admin")]
+        public async Task<ActionResult> AssignRole(RegisterRequestDTO model , string roleName) 
+        {
+            bool roleIsAssigned = await _service.AssignRole(model.Email , roleName!.ToUpper());
+            if (!roleIsAssigned) 
+            {
+                _apiResponse.IsSuccess = false;
+                _apiResponse.ErrorMessage = "Error Occured";
+                return BadRequest(_apiResponse);
+            }
+            _apiResponse.IsSuccess = true;
+            return Ok(_apiResponse);
         }
     }
 }
