@@ -56,7 +56,6 @@ namespace Mango.Services.AuthAPI.Service
                     return result!.Errors!.FirstOrDefault()!.Description;
                 }
 
-
             }catch(Exception ex)
             {
                 
