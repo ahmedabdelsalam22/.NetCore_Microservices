@@ -1,4 +1,5 @@
-﻿using Mango.Web.Models.DTOS;
+﻿using Mango.Web.Models;
+using Mango.Web.Models.DTOS;
 
 namespace Mango.Web.Service.IService
 {
