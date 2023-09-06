@@ -42,7 +42,6 @@ namespace Mango.Services.AuthAPI.Service
             // there user is valid and exists in db .. so we will generate token.
 
 
-
             UserDTO userDTO = _mapper.Map<UserDTO>(user);
 
             return new LoginResponseDTO()
