@@ -66,7 +66,7 @@ namespace Mango.Services.AuthAPI.Controllers
         }
 
         [HttpPost("assignRole")]
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult> AssignRole(RegisterRequestDTO model , string roleName) 
         {
             bool roleIsAssigned = await _service.AssignRole(model.Email , roleName!.ToUpper());
