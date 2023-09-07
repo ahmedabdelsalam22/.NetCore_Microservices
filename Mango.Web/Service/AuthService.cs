@@ -23,6 +23,7 @@ namespace Mango.Web.Service
                 Url = SD.AuthAPIBase + "/api/auth/assignRole",
                 Data = registerRequestDTO
             });
+
         }
 
         public async Task<ResponseDTO?> Login(LoginRequestDTO loginRequestDTO)
