@@ -26,7 +26,15 @@ namespace Mango.Services.AuthAPI.Service
             _mapper = mapper;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
-
+        public bool IsUniqueUser(string username)
+        {
+            var user = _dbContext.ApplicationUsers.FirstOrDefault(x => x.UserName == username);
+            if (user == null)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<bool> AssignRole(string email, string roleName)
         {
             ApplicationUser? user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(x=>x.Email!.ToLower() == email.ToLower());
@@ -71,32 +79,34 @@ namespace Mango.Services.AuthAPI.Service
 
         public async Task<UserDTO> Register(RegisterRequestDTO model)
         {
-            ApplicationUser user = new()
-            {
-                UserName = model.UserName,
-                Name = model.Name,
-                Email = model.Email,
-                NormalizedEmail = model.Email.ToUpper(),
-                PhoneNumber = model.PhoneNumber
-            };
-
             try 
             {
+                ApplicationUser user = new()
+                {
+                    UserName = model.UserName,
+                    Name = model.Name,
+                    Email = model.Email,
+                    NormalizedEmail = model.Email.ToUpper(),
+                    PhoneNumber = model.PhoneNumber
+                };
+
                 var result = await _userManager.CreateAsync(user,model.Password);
                 if (result.Succeeded)
                 {
                     // assign role to user 
                     await AssignRole(user.Email , "Customer");
 
-                    var userFromDB = _dbContext.ApplicationUsers.First(x => x.UserName!.ToLower() == model.UserName.ToLower());
+                    var userFromDb = await _dbContext.ApplicationUsers.FirstAsync(x=>x.UserName.ToLower() == user.UserName.ToLower());
 
-                    UserDTO userDTO = _mapper.Map<UserDTO>(userFromDB);
+                    UserDTO userDTO = _mapper.Map<UserDTO>(userFromDb);
                     
                     return userDTO;
                 }
 
-            }catch(Exception ex){}
-
+            }catch(Exception ex)
+            {
+                return new UserDTO();
+            }
             return new UserDTO();
         }
     }
