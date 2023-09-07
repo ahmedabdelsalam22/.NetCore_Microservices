@@ -1,4 +1,5 @@
-﻿using Mango.Services.AuthAPI.Models;
+﻿using Azure;
+using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Models.DTOS;
 using Mango.Services.AuthAPI.Service.IService;
 using Mango.Services.CouponAPI.Data;
@@ -28,7 +29,7 @@ namespace Mango.Services.AuthAPI.Controllers
         public async Task<ActionResult<LoginResponseDTO>> Login([FromBody] LoginRequestDTO loginRequestDTO) 
         {
             LoginResponseDTO loginResponse = await _service.Login(loginRequestDTO);
-            if (loginResponse.userDTO == null) 
+            if (loginResponse.userDTO == null || string.IsNullOrEmpty(loginResponse.Token)) 
             {
                 _apiResponse.IsSuccess = false;
                 _apiResponse.ErrorMessage = "username or password is not correct";
@@ -43,24 +44,34 @@ namespace Mango.Services.AuthAPI.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> Register([FromBody] RegisterRequestDTO registerRequestDTO)
+        public async Task<ActionResult<APIResponse>> Register([FromBody] RegisterRequestDTO model)
         {
-            try
+            if (model.Name.ToLower() == model.UserName.ToLower()) 
             {
-                var userDTO = await _service.Register(registerRequestDTO);
-
-                if (userDTO.Email != null)
-                
-                    _apiResponse.StatusCode = HttpStatusCode.OK;
-                    _apiResponse.IsSuccess = true;
-                    return _apiResponse;
-
+                return BadRequest("username and name are the same!");
             }
-            catch (Exception ex) 
+            bool ifUserNameUnique = _service.IsUniqueUser(model.UserName);
+            if (!ifUserNameUnique)
             {
                 _apiResponse.StatusCode = HttpStatusCode.BadRequest;
                 _apiResponse.IsSuccess = false;
-                _apiResponse.ErrorMessage = ex.Message;
+                _apiResponse.ErrorMessage="Username already exists";
+                return _apiResponse;
+            }
+
+            var userDTO = await _service.Register(model);
+
+            if (userDTO != null)
+            {
+                _apiResponse.IsSuccess = true;
+                _apiResponse.StatusCode = HttpStatusCode.OK;
+                return _apiResponse;
+            }
+            else 
+            {
+                _apiResponse.StatusCode = HttpStatusCode.BadRequest;
+                _apiResponse.IsSuccess = false;
+                _apiResponse.ErrorMessage = "Error while registering";
                 return _apiResponse;
             }
         }
