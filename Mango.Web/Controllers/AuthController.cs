@@ -34,19 +34,6 @@ namespace Mango.Web.Controllers
                 LoginResponseDTO? loginResponseDTO = 
                     JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
 
-                // read token from login response and store it in web front end project (SD) class
-                var handler = new JwtSecurityTokenHandler();
-                var jwt = handler.ReadJwtToken(loginResponseDTO!.Token);
-
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "name").Value));
-                identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
-                var principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-                HttpContext.Session.SetString(SD.SessionToken, loginResponseDTO.Token);
-
-
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -54,7 +41,6 @@ namespace Mango.Web.Controllers
                 return View(model);
             }
         }
-
         [HttpGet]
         public IActionResult Register()
         {
