@@ -13,9 +13,10 @@ namespace Mango.Services.AuthAPI.Models.DTOS
         public string PhoneNumber { get; set; }
         [EmailAddress]
         public string Email { get; set; }
+        [Required]
         [DataType(DataType.Password)]
         [MinLength(8,ErrorMessage ="password must contains 8 characters and numbers at least")]
-        [RegularExpression("([a-z]|[A-Z]|[0-9]){4}[a-zA-Z0-9\\W]{3,11}", ErrorMessage = "Invalid password format")]
+        [RegularExpression("([a-z]|[A-Z]|[0-9]){4}[a-zA-Z0-9\\W]{3,11}", ErrorMessage = "password must contains capital letters")]
         public string Password { get; set; }
     }
 }

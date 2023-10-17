@@ -1,6 +1,9 @@
+using Mango.Web.RestService;
+using Mango.Web.RestService.IRestService;
 using Mango.Web.Service;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
+using System.ComponentModel.Design;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,8 @@ SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"]!;
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 
 
 var app = builder.Build();

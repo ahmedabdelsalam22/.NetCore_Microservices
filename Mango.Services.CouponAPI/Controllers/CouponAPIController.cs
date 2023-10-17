@@ -14,19 +14,17 @@ namespace Mango.Services.CouponAPI.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly APIResponse apiResponse;
         public CouponAPIController(IUnitOfWork unitOfWork,IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.apiResponse = new APIResponse();
         }
 
         [HttpGet("coupons")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetAllCoupons() 
+        public async Task<ActionResult<List<CouponDTO>>> GetAllCoupons() 
         {
             try
             {
@@ -36,25 +34,19 @@ namespace Mango.Services.CouponAPI.Controllers
                     return NotFound();
                 }
                 List<CouponDTO> couponDTOs = mapper.Map<List<CouponDTO>>(coupons);
-
-                apiResponse.IsSuccess = true;
-                apiResponse.StatusCode = HttpStatusCode.OK;
-                apiResponse.Result = couponDTOs;
-                return apiResponse;
+               
+                return Ok(couponDTOs);
             }
             catch (Exception ex) 
             {
-                apiResponse.IsSuccess = false;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.ErrorMessage = new List<string>() { ex.Message };
-                return apiResponse;
+                return BadRequest(new List<CouponDTO>());
             }
         }
         [HttpGet("{couponId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetCouponById(int? couponId) 
+        public async Task<ActionResult<CouponDTO>> GetCouponById(int? couponId) 
         {
             try
             {
@@ -65,24 +57,18 @@ namespace Mango.Services.CouponAPI.Controllers
                 }
                 CouponDTO couponDTO = mapper.Map<CouponDTO>(coupon);
 
-                apiResponse.IsSuccess = true;
-                apiResponse.StatusCode = HttpStatusCode.OK;
-                apiResponse.Result = couponDTO;
-                return apiResponse;
+                return Ok(couponDTO);
             }
             catch (Exception ex) 
             {
-                apiResponse.IsSuccess = false;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.ErrorMessage = new List<string>() { ex.Message };
-                return apiResponse;
+                return BadRequest(new CouponDTO());
             }
         } 
         [HttpGet("couponCode/{couponCode}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> GetCouponByCouponCode(string? couponCode) 
+        public async Task<ActionResult<CouponDTO>> GetCouponByCouponCode(string? couponCode) 
         {
             try
             {
@@ -93,17 +79,11 @@ namespace Mango.Services.CouponAPI.Controllers
                 }
                 CouponDTO couponDTO = mapper.Map<CouponDTO>(coupon);
 
-                apiResponse.IsSuccess = true;
-                apiResponse.StatusCode = HttpStatusCode.OK;
-                apiResponse.Result = couponDTO;
-                return apiResponse;
+                return Ok(couponDTO);
             }
             catch (Exception ex) 
             {
-                apiResponse.IsSuccess = false;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.ErrorMessage = new List<string>() { ex.Message };
-                return apiResponse;
+                return BadRequest(new CouponDTO());
             }
         }
 
@@ -111,7 +91,7 @@ namespace Mango.Services.CouponAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> CreateCoupon([FromBody] CouponCreateDTO couponCreateDTO)
+        public async Task<ActionResult<CouponDTO>> CreateCoupon([FromBody] CouponCreateDTO couponCreateDTO)
         {
             try 
             {
@@ -128,23 +108,22 @@ namespace Mango.Services.CouponAPI.Controllers
                 await unitOfWork.couponRepository.Create(coupon);
                 await unitOfWork.Save();
 
-                apiResponse.IsSuccess = true;
-                apiResponse.StatusCode = HttpStatusCode.Created;
-                return apiResponse;
+                Coupon couponFromDb = await unitOfWork.couponRepository.Get(filter: x => x.CouponCode.ToLower() == couponCreateDTO.CouponCode.ToLower());
+
+                CouponDTO couponDTO = mapper.Map<CouponDTO>(couponFromDb);
+
+                return Ok(couponDTO);
             }
             catch (Exception ex)
             {
-                apiResponse.IsSuccess = false;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.ErrorMessage = new List<string>() { ex.Message };
-                return apiResponse;
+                return BadRequest(new CouponDTO());
             }
         }
         [HttpPut("update/{couponId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateCoupon(int? couponId, [FromBody] CouponUpdateDTO couponUpdateDTO)
+        public async Task<ActionResult<CouponDTO>> UpdateCoupon(int? couponId, [FromBody] CouponUpdateDTO couponUpdateDTO)
         {
             try 
             {
@@ -167,23 +146,24 @@ namespace Mango.Services.CouponAPI.Controllers
                 Coupon coupon = mapper.Map<Coupon>(couponUpdateDTO);
                 unitOfWork.couponRepository.Update(coupon);
                 await unitOfWork.Save();
-                apiResponse.IsSuccess = true;
-                apiResponse.StatusCode = HttpStatusCode.OK;
-                return apiResponse;
+
+                Coupon couponFromDb = await unitOfWork.couponRepository.Get(filter: x => x.CouponCode.ToLower() == couponUpdateDTO.CouponCode.ToLower());
+
+                CouponDTO couponDTO = mapper.Map<CouponDTO>(couponFromDb);
+
+                return Ok(couponDTO);
+
             }
             catch (Exception ex)
             {
-                apiResponse.IsSuccess = false;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.ErrorMessage = new List<string>() { ex.Message };
-                return apiResponse;
+                return BadRequest(new CouponDTO());
             }
         }
         [HttpDelete("delete/{couponId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> DeleteCoupon(int? couponId) 
+        public async Task<ActionResult> DeleteCoupon(int? couponId) 
         {
             try 
             {
@@ -198,17 +178,11 @@ namespace Mango.Services.CouponAPI.Controllers
                 }
                 unitOfWork.couponRepository.Delete(coupon);
                 await unitOfWork.Save();
-
-                apiResponse.IsSuccess = true;
-                apiResponse.StatusCode = HttpStatusCode.OK;
-                return apiResponse;
+                return Ok();
             }
             catch (Exception ex)
             {
-                apiResponse.IsSuccess = false;
-                apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                apiResponse.ErrorMessage = new List<string>() { ex.Message };
-                return apiResponse;
+                return BadRequest();
             }
         }
     }
