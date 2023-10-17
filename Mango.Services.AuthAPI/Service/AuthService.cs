@@ -61,7 +61,7 @@ namespace Mango.Services.AuthAPI.Service
                 return new LoginResponseDTO()
                 {
                     userDTO = null,
-                    Token = ""
+                    Token = null
                 };
             }
             // there user is valid and exists in db .. so we will generate token.

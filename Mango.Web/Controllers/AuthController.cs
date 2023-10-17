@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Mango.Web.Controllers
 {
@@ -22,14 +23,15 @@ namespace Mango.Web.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            LoginRequestDTO loginRequestDTO = new LoginRequestDTO(); 
+            return View(loginRequestDTO);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDTO model)
         {
             ResponseDTO? response = await _authService.Login(model);
-            if (response.IsSuccess)
+            if (response!.IsSuccess)
             {
                 LoginResponseDTO? loginResponseDTO = 
                     JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
@@ -38,7 +40,7 @@ namespace Mango.Web.Controllers
             }
             else
             {
-                return View(model);
+                return View();
             }
         }
         [HttpGet]

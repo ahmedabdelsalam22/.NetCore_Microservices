@@ -61,27 +61,21 @@ namespace Mango.Web.Service
                 switch (responseMessage.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        return new ResponseDTO() { IsSuccess = false, ErrorMessage = "Not found" };
+                        return new ResponseDTO() { IsSuccess = false, Message = "Not found" };
                     case HttpStatusCode.Forbidden:
-                        return new ResponseDTO() { IsSuccess = false, ErrorMessage = "Forbidden" };
+                        return new ResponseDTO() { IsSuccess = false, Message = "Forbidden" };
                     case HttpStatusCode.Unauthorized:
-                        return new ResponseDTO() { IsSuccess = false, ErrorMessage = "Unauthorized" };
+                        return new ResponseDTO() { IsSuccess = false, Message = "Unauthorized" };
                     case HttpStatusCode.InternalServerError:
-                        return new ResponseDTO() { IsSuccess = false, ErrorMessage = "InternalServerError" };
+                        return new ResponseDTO() { IsSuccess = false, Message = "InternalServerError" };
 
                     default:
                         var apiContent = await responseMessage.Content.ReadAsStringAsync();
-                        ResponseDTO responseDto = JsonConvert.DeserializeObject<ResponseDTO>(apiContent);
 
-                        //so 
-                        return new ResponseDTO()
-                        {
-                            IsSuccess = responseDto!.IsSuccess,
-                            Result = responseDto.Result,
-                            ErrorMessage = responseDto.ErrorMessage,
-                        };
+                        var responseDto = JsonConvert.DeserializeObject<ResponseDTO>(apiContent); 
+
+                        return responseDto;
                 }
-
 
             }
             catch (Exception ex)
@@ -90,7 +84,7 @@ namespace Mango.Web.Service
                 {
                     IsSuccess = false,
                     Result = null,
-                    ErrorMessage = ex.Message,
+                    Message = ex.Message,
                 };
                 return dto;
             }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CouponDTO>
+﻿@model List<Coupon>
 @{
     ViewData["Title"] = "CouponIndex";
 }
@@ -21,7 +21,7 @@
     </thead>
 
     <tbody>
-        @foreach(CouponDTO n in Model)
+        @foreach(var n in Model)
         {
             <tr>
 @*                <td>@n.CouponId</td>
