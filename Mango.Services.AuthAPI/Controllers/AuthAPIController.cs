@@ -16,13 +16,10 @@ namespace Mango.Services.AuthAPI.Controllers
     {
         private readonly IAuthService _service;
         private readonly APIResponse _apiResponse;
-        private readonly IConfiguration? _configuration;
-        private string? _secretKey;
 
         public AuthAPIController(IAuthService service, IConfiguration configuration)
         {
             _service = service;
-            _secretKey = configuration.GetValue<string>("");
             _apiResponse = new();
         }
         [HttpPost("login")]
