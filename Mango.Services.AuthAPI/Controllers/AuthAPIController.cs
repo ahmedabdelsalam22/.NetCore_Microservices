@@ -45,12 +45,12 @@ namespace Mango.Services.AuthAPI.Controllers
         {
             if (model.Name.ToLower() == model.UserName.ToLower())
             {
-                return BadRequest("username and name are the same!");
+               ModelState.AddModelError("", "username and name are the same!");
             }
             bool ifUserNameUnique = _service.IsUniqueUser(model.UserName);
             if (!ifUserNameUnique)
             {
-                return BadRequest("Username already exists");
+                ModelState.AddModelError("", "Username already exists");
             }
 
             var userDTO = await _service.Register(model);
