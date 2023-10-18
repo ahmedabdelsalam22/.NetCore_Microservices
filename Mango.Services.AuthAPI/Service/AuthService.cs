@@ -102,12 +102,12 @@ namespace Mango.Services.AuthAPI.Service
                     
                     return userDTO;
                 }
-
-            }catch(Exception ex)
+                return new UserDTO();
+            }
+            catch(Exception ex)
             {
                 return new UserDTO();
             }
-            return new UserDTO();
         }
     }
 }
