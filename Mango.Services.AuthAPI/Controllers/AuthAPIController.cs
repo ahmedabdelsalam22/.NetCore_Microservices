@@ -41,7 +41,7 @@ namespace Mango.Services.AuthAPI.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> Register([FromBody] RegisterRequestDTO model)
+        public async Task<ActionResult<UserDTO>> Register([FromBody] RegisterRequestDTO model)
         {
             if (model.Name.ToLower() == model.UserName.ToLower()) 
             {
@@ -50,26 +50,18 @@ namespace Mango.Services.AuthAPI.Controllers
             bool ifUserNameUnique = _service.IsUniqueUser(model.UserName);
             if (!ifUserNameUnique)
             {
-                _apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                _apiResponse.IsSuccess = false;
-                _apiResponse.ErrorMessage="Username already exists";
-                return _apiResponse;
+                return BadRequest("Username already exists");
             }
 
             var userDTO = await _service.Register(model);
 
             if (userDTO != null)
             {
-                _apiResponse.IsSuccess = true;
-                _apiResponse.StatusCode = HttpStatusCode.OK;
-                return _apiResponse;
+                return Ok(userDTO);
             }
             else 
             {
-                _apiResponse.StatusCode = HttpStatusCode.BadRequest;
-                _apiResponse.IsSuccess = false;
-                _apiResponse.ErrorMessage = "Error while registering";
-                return _apiResponse;
+                return BadRequest("Error while registering");
             }
         }
 
