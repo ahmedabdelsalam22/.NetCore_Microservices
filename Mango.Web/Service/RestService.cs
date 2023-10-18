@@ -17,7 +17,6 @@ namespace RestCharpCourse.Services
         }
 
 
-
         public async Task Delete(string url)
         {
             var request = new RestRequest(url, Method.Delete);
@@ -35,10 +34,6 @@ namespace RestCharpCourse.Services
 
         public async Task<List<T>> GetAsync(string url)
         {
-
-            var authenticator = new JwtAuthenticator(pureToken);
-
-
 
             var request = new RestRequest(url, Method.Get);
 
