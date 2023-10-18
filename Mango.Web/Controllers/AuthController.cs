@@ -9,16 +9,16 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Mango.Web.RestService.IRestService;
 
 namespace Mango.Web.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
+        private readonly IAuthRestService _authRestService;
+        public AuthController(IAuthRestService authRestService)
         {
-            _authService = authService;
+            _authRestService = authRestService;
         }
         [HttpGet]
         public IActionResult Login()
@@ -30,18 +30,13 @@ namespace Mango.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginRequestDTO model)
         {
-            ResponseDTO? response = await _authService.Login(model);
-            if (response!.IsSuccess)
-            {
-                LoginResponseDTO? loginResponseDTO = 
-                    JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
+            var response = await _authRestService.Login(url: "/api/auth/login", loginRequestDTO:model);
 
+            if (response.Token != null) 
+            {
                 return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                return View();
-            }
+            return View(model);
         }
         [HttpGet]
         public IActionResult Register()
@@ -53,12 +48,13 @@ namespace Mango.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterRequestDTO model)
         {
-            ResponseDTO? result = await _authService.Register(model);
-            if (result != null && result.IsSuccess)
+            var response = await _authRestService.Register(url: "/api/auth/register", registerRequestDTO: model);
+
+            if (response != null) 
             {
                 return RedirectToAction("Login");
             }
-            return View();
+            return View(model);
         }
 
         public IActionResult Logout() 
