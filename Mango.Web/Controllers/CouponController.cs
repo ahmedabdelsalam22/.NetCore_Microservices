@@ -2,11 +2,13 @@
 using Mango.Web.Models.DTOS;
 using Mango.Web.RestService;
 using Mango.Web.RestService.IRestService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Mango.Web.Controllers
 {
+    [Authorize]
     public class CouponController : Controller
     {
         private readonly ICouponRestService _couponRest;
