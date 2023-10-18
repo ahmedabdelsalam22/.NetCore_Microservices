@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json;
 using Mango.Web.Utility;
 using Mango.Web.RestService.IRestService;
+using RestSharp.Authenticators;
 
 namespace RestCharpCourse.Services
 {
@@ -14,6 +15,8 @@ namespace RestCharpCourse.Services
         {
             _restClient = new RestClient($"{SD.CouponAPIBase}");
         }
+
+
 
         public async Task Delete(string url)
         {
@@ -32,6 +35,11 @@ namespace RestCharpCourse.Services
 
         public async Task<List<T>> GetAsync(string url)
         {
+
+            var authenticator = new JwtAuthenticator(pureToken);
+
+
+
             var request = new RestRequest(url, Method.Get);
 
              

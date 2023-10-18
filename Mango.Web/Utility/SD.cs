@@ -4,10 +4,7 @@
     {
         public static string CouponAPIBase { get; set; }
         public static string AuthAPIBase { get; set; }
-        public static string SessionToken { get; set; }
-        public enum ApiType 
-        {
-            GET, POST, PUT, DELETE
-        }
+        public const string TokenCookie = "JWTToken";
+       
     }
 }

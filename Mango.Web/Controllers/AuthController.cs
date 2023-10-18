@@ -9,15 +9,18 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Mango.Web.RestService.IRestService;
+using Mango.Web.Service.IService;
 
 namespace Mango.Web.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthRestService _authRestService;
-        public AuthController(IAuthRestService authRestService)
+        private readonly ITokenProvider _tokenProvider;
+        public AuthController(IAuthRestService authRestService, ITokenProvider tokenProvider)
         {
             _authRestService = authRestService;
+            _tokenProvider = tokenProvider;
         }
         [HttpGet]
         public IActionResult Login()
@@ -33,6 +36,7 @@ namespace Mango.Web.Controllers
 
             if (response.Token != null) 
             {
+                _tokenProvider.SetToken(response.Token);
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
