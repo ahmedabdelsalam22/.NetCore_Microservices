@@ -1,6 +1,5 @@
 ﻿using Mango.FrontEnd.Models.DTOS;
 using Mango.Web.Models.DTOS;
-using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -48,11 +47,15 @@ namespace Mango.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterRequestDTO model)
         {
-            var response = await _authRestService.Register(url: "/api/auth/register", registerRequestDTO: model);
-
-            if (response != null) 
+            if (ModelState.IsValid) 
             {
-                return RedirectToAction("Login");
+                var response = await _authRestService.Register(url: "/api/auth/register", registerRequestDTO: model);
+
+                if (response.ID != null)
+                {
+                    return RedirectToAction("Login");
+                }
+                return View(model);
             }
             return View(model);
         }

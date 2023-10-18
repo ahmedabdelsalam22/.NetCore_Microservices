@@ -43,7 +43,7 @@ namespace Mango.Services.AuthAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDTO>> Register([FromBody] RegisterRequestDTO model)
         {
-            if (model.Name.ToLower() == model.UserName.ToLower()) 
+            if (model.Name.ToLower() == model.UserName.ToLower())
             {
                 return BadRequest("username and name are the same!");
             }
@@ -57,11 +57,11 @@ namespace Mango.Services.AuthAPI.Controllers
 
             if (userDTO != null)
             {
-                return Ok(userDTO);
+                return userDTO;
             }
-            else 
+            else
             {
-                return BadRequest("Error while registering");
+                return new UserDTO();
             }
         }
 
