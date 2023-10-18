@@ -2,6 +2,7 @@ using Mango.Web.RestService;
 using Mango.Web.RestService.IRestService;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.ComponentModel.Design;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,12 @@ builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 builder.Services.AddScoped<IAuthRestService, AuthRestService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => {
+        options.ExpireTimeSpan = TimeSpan.FromHours(10);
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+    });
 
 var app = builder.Build();
 
@@ -34,6 +41,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
