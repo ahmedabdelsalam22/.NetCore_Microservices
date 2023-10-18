@@ -66,7 +66,9 @@ namespace Mango.Services.AuthAPI.Service
             }
             // there user is valid and exists in db .. so we will generate token.
 
-            var token = _jwtTokenGenerator.GenerateToken(user); // interface is responsible for generating token
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var token = _jwtTokenGenerator.GenerateToken(user, roles); // interface is responsible for generating token
 
             UserDTO userDTO = _mapper.Map<UserDTO>(user);
 
