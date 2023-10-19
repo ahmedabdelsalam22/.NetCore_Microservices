@@ -17,6 +17,7 @@ SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"]!;
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"]!;
 
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 builder.Services.AddScoped<IAuthRestService, AuthRestService>();
@@ -29,6 +30,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Auth/AccessDenied";
     });
+
 
 
 
