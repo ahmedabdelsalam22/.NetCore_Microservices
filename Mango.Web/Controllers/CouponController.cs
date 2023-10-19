@@ -21,7 +21,7 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> CouponIndex()
         {
-            List<Coupon> coupons = await _couponRest.GetAsync(url:"/api/couponApi/coupons");
+            List<Coupon> coupons = await _couponRest.GetAsync(url:$"{SD.CouponAPIBase}/api/couponApi/coupons");
 
             return View(coupons);
         }
@@ -35,14 +35,14 @@ namespace Mango.Web.Controllers
         [Authorize(Roles ="ADMIN")]
         public async Task<IActionResult> CreateCoupon(Coupon coupon)
         {
-           await _couponRest.PostAsync(url: "/api/couponApi/create" , data:coupon);
+           await _couponRest.PostAsync(url: $"{SD.CouponAPIBase}/api/couponApi/create" , data:coupon);
 
             return RedirectToAction("CouponIndex");
         }
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeleteCoupon(int couponId) 
         {
-            await _couponRest.Delete(url: $"/api/couponApi/delete/{couponId}"); 
+            await _couponRest.Delete(url: $"{SD.CouponAPIBase}/api/couponApi/delete/{couponId}"); 
            return RedirectToAction(nameof(CouponIndex));
         }
     }

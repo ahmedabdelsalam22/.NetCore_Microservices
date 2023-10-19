@@ -13,9 +13,9 @@ namespace RestCharpCourse.Services
         private readonly RestClient _restClient;
         private readonly ITokenProvider _tokenProvider;
 
-        public RestService(ITokenProvider tokenProvider,string baseUrl)
+        public RestService(ITokenProvider tokenProvider)
         {
-            _restClient = new RestClient(baseUrl);
+            _restClient = new RestClient();
             _tokenProvider = tokenProvider;
         }
 

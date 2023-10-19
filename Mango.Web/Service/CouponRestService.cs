@@ -7,7 +7,7 @@ namespace Mango.Web.RestService
 {
     public class CouponRestService : RestService<Coupon>, ICouponRestService
     {
-        public CouponRestService(ITokenProvider tokenProvider, string baseUrl) : base(tokenProvider, $"{SD.CouponAPIBase}")
+        public CouponRestService(ITokenProvider tokenProvider) : base(tokenProvider)
         {
         }
     }

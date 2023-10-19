@@ -8,7 +8,7 @@ namespace Mango.Web.Service
 {
     public class ProductRestService : RestService<Product>, IProductRestService
     {
-        public ProductRestService(ITokenProvider tokenProvider, string baseUrl) : base(tokenProvider,$"{SD.ProductAPIBase}")
+        public ProductRestService(ITokenProvider tokenProvider) : base(tokenProvider)
         {
         }
     }
