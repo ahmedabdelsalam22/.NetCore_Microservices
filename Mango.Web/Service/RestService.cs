@@ -4,24 +4,30 @@ using System.Text.Json;
 using Mango.Web.Utility;
 using Mango.Web.RestService.IRestService;
 using RestSharp.Authenticators;
+using Mango.Web.Service.IService;
 
 namespace RestCharpCourse.Services
 {
     public class RestService<T> : IRestService<T> where T : class
     {
         private readonly RestClient _restClient;
+        private readonly ITokenProvider _tokenProvider;
 
-        public RestService()
+        public RestService(ITokenProvider tokenProvider)
         {
             _restClient = new RestClient($"{SD.CouponAPIBase}");
+            _tokenProvider = tokenProvider;
         }
 
 
-        public async Task Delete(string url)
+        public async Task Delete(string url,bool withBearer = true)
         {
             var request = new RestRequest(url, Method.Delete);
 
-            //request.AddHeader("Authorization", $"Bearer {token}"); // read token from method parameter
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
 
             // var response = await _restClient.DeleteAsync(request);
             var response = await _restClient.ExecuteAsync(request); // "ExecuteAsync" handling error default if occured
@@ -32,13 +38,17 @@ namespace RestCharpCourse.Services
             }
         }
 
-        public async Task<List<T>> GetAsync(string url)
+        public async Task<List<T>> GetAsync(string url, bool withBearer = true)
         {
 
             var request = new RestRequest(url, Method.Get);
 
-             
-           // request.AddHeader("Authorization", $"Bearer {token}");
+
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
 
 
             //// one way 
@@ -51,25 +61,34 @@ namespace RestCharpCourse.Services
 
              return response.Data!;
         }
-        public async Task PostAsync(string url, T data)
+        public async Task PostAsync(string url, T data, bool withBearer = true)
         {
             var request = new RestRequest(url, Method.Post);
 
             request.AddJsonBody(data);
 
             request.AddHeader("Accept", "application/json");
-            // request.AddHeader("Authorization", $"Bearer {token}");
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
 
             await _restClient.ExecutePostAsync(request);
         }
 
-        public async Task<T> UpdateAsync(string url, T data)
+        public async Task<T> UpdateAsync(string url, T data, bool withBearer = true)
         {
             var request = new RestRequest(url, Method.Put);
 
             request.AddJsonBody(data);
             request.AddHeader("Accept", "application/json");
-            // request.AddHeader("Authorization", $"Bearer {token}");
+
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
 
             var response = await _restClient.ExecutePutAsync<T>(request);
 
