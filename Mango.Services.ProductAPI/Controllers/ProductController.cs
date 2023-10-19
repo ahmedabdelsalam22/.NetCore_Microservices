@@ -4,6 +4,7 @@ using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Mango.Services.ProductAPI.Controllers
 {
@@ -73,33 +74,65 @@ namespace Mango.Services.ProductAPI.Controllers
         }
 
         [HttpPut("product/update/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateProduct(int id ,[FromBody] ProductUpdateDto productUpdateDto)
         {
             try
             {
-                if (id == 0 || id == null)
+                if (ModelState.IsValid) 
                 {
-                    return BadRequest("no data found with this id");
+                    if (id == 0 || id == null)
+                    {
+                        return BadRequest("no data found with this id");
+                    }
+                    
+                    Product product = await _productRepository.Get(filter: x => x.ProductId == id, tracked: false);
+
+                    if (product == null)
+                    {
+                        return BadRequest($"no product found with id: {id}");
+                    }
+
+
+                    Product productToUpdate = _mapper.Map<Product>(productUpdateDto);
+
+                    productToUpdate.ProductId = id;
+
+                    await _productRepository.Update(productToUpdate);
+
+                    return Ok(productToUpdate);
                 }
-                if (productUpdateDto == null)
+                return BadRequest("model is not valid");
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        [HttpPost("product/create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductCreateDto productCreateDto) 
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
                 {
-                    return BadRequest("failed");
+                    Product productFromDb = await _productRepository.Get(filter: x => x.Name.ToLower() == productCreateDto.Name.ToLower(), tracked: false);
+
+                    if (productFromDb != null)
+                    {
+                        return BadRequest("product already exists");
+                    }
+
+                    Product productToDb = _mapper.Map<Product>(productCreateDto);
+                    await _productRepository.Create(productToDb);
+                    return Ok(productToDb);
                 }
-                Product product = await _productRepository.Get(filter: x => x.ProductId == id, tracked: false);
-
-                if (product == null)
-                {
-                    return BadRequest($"no product found with id: {id}");
-                }
-
-
-                Product productToUpdate = _mapper.Map<Product>(productUpdateDto);
-
-                productToUpdate.ProductId = id;
-
-                await _productRepository.Update(productToUpdate);
-
-                return Ok(productToUpdate);
+                return BadRequest("model is not valid");
             }
             catch (Exception ex) 
             {
