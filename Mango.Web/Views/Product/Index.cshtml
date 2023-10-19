@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Product>
+
+@if (User.IsInRole("ADMIN"))
+{
+    <div class="row m-4 text-end">
+        <div class="col-12">
+            <a type="submit" class="btn btn-primary" asp-action="CreateProduct">Create Product</a>
+        </div>
+    </div>
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active">
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>CategoryName</th>
+            <th>ImageUrl</th>
+            @if (User.IsInRole("ADMIN"))
+            {
+                <th>Delete</th>
+            }
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var n in Model)
+        {
+            <tr>
+                <td>@n.Name</td>
+                <td>@n.Description</td>
+                <td>@n.Price $</td>
+                <td>@n.CategoryName</td>
+                <td>@n.ImageUrl</td>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <td>
+                        <a type="submit" asp-action="DeleteProduct" asp-route-couponId="@n.ProductId" class="btn-danger">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+
+</table>

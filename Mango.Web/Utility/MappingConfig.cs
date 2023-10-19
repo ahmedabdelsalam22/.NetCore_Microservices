@@ -1,6 +1,8 @@
-﻿namespace Mango.Web.Utility
+﻿using AutoMapper;
+
+namespace Mango.Web.Utility
 {
-    public class MappingConfig
+    public class MappingConfig : Profile
     {
     }
 }
