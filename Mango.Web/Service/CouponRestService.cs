@@ -1,5 +1,6 @@
 ﻿using Mango.Web.RestService.IRestService;
 using Mango.Web.Service.IService;
+using Mango.Web.Utility;
 using RestCharpCourse.Services;
 
 namespace Mango.Web.RestService

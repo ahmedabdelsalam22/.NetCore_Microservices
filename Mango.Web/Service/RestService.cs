@@ -15,7 +15,7 @@ namespace RestCharpCourse.Services
 
         public RestService(ITokenProvider tokenProvider)
         {
-            _restClient = new RestClient($"{SD.CouponAPIBase}");
+            _restClient = new RestClient();
             _tokenProvider = tokenProvider;
         }
 
