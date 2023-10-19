@@ -1,3 +1,5 @@
+using Mango.Services.CouponAPI.Repository;
+using Mango.Services.CouponAPI.Repository.IRepository;
 using Mango.Services.ProductAPI;
 using Mango.Services.ProductAPI.Data;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +19,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(connectionString: connectionString));
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 var app = builder.Build();

@@ -17,11 +17,14 @@ namespace Mango.Services.CouponAPI.Repository
         public async Task Create(T entity)
         {
             await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+
         }
 
         public Task<T> Get(Expression<Func<T, bool>>? filter = null, bool tracked = true)
