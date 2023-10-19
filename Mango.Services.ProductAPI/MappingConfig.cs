@@ -9,6 +9,7 @@ namespace Mango.Services.ProductAPI
         public MappingConfig() 
         {
             CreateMap<Product, ProductDto>();
+            CreateMap<ProductUpdateDto, Product>();
         }
     }
 }
