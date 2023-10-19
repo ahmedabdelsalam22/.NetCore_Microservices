@@ -3,11 +3,14 @@
     ViewData["Title"] = "CouponIndex";
 }
 
-<div class="row m-4 text-end">
-    <div class="col-12">
-        <a type="submit" class="btn btn-primary" asp-action="CreateCoupon">Create Coupon</a>
+@if (User.IsInRole("ADMIN"))
+{
+    <div class="row m-4 text-end">
+        <div class="col-12">
+            <a type="submit" class="btn btn-primary" asp-action="CreateCoupon">Create Coupon</a>
+        </div>
     </div>
-</div>
+}
 
 <table class="table table-hover">
     <thead>
@@ -16,7 +19,10 @@
 *@            <th>CouponCode</th>
             <th>DiscountAmount</th>
             <th>MinAmount</th>
-            <th>Delete</th>
+            @if (User.IsInRole("ADMIN"))
+            {
+                <th>Delete</th>
+            }
         </tr>
     </thead>
 
@@ -28,9 +34,12 @@
 *@                <td>@n.CouponCode</td>
                 <td>@n.DiscountAmount$</td>
                 <td>@n.MinAmount$</td>
-                <td>
-                    <a type="submit" asp-action="DeleteCoupon" asp-route-couponId="@n.CouponId" class="btn-danger">Delete</a>
-                </td>
+                @if (User.IsInRole("ADMIN"))
+                {
+                    <td>
+                        <a type="submit" asp-action="DeleteCoupon" asp-route-couponId="@n.CouponId" class="btn-danger">Delete</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

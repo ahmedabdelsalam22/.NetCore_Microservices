@@ -2,6 +2,7 @@
 using Mango.Web.Models.DTOS;
 using Mango.Web.RestService;
 using Mango.Web.RestService.IRestService;
+using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -20,7 +21,6 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> CouponIndex()
         {
-            
             List<Coupon> coupons = await _couponRest.GetAsync(url:"/api/couponApi/coupons");
 
             return View(coupons);
@@ -32,13 +32,14 @@ namespace Mango.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="ADMIN")]
         public async Task<IActionResult> CreateCoupon(Coupon coupon)
         {
            await _couponRest.PostAsync(url: "/api/couponApi/create" , data:coupon);
 
             return RedirectToAction("CouponIndex");
         }
-
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> DeleteCoupon(int couponId) 
         {
             await _couponRest.Delete(url: $"/api/couponApi/delete/{couponId}"); 
