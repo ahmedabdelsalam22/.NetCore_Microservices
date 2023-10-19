@@ -2,6 +2,7 @@
 using Mango.Services.CouponAPI.Repository.IRepository;
 using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
@@ -10,6 +11,7 @@ namespace Mango.Services.ProductAPI.Controllers
 {
     [Route("api/")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -157,7 +159,7 @@ namespace Mango.Services.ProductAPI.Controllers
                 }
 
                 await _productRepository.Delete(product);
-                return NoContent();
+                return Ok();
             }
             catch (Exception ex)
             {
