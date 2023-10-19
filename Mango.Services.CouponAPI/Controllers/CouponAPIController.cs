@@ -10,7 +10,7 @@ using System.Net;
 namespace Mango.Services.CouponAPI.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class CouponAPIController : ControllerBase
     {
