@@ -1,5 +1,6 @@
 using Mango.Web.RestService;
 using Mango.Web.RestService.IRestService;
+using Mango.Web.Service;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +15,7 @@ builder.Services.AddHttpContextAccessor();
 
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"]!;
+SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"]!;
 
 
 builder.Services.AddScoped<ICouponRestService, CouponRestService>();

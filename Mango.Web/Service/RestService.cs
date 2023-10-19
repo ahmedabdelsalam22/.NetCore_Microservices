@@ -13,9 +13,9 @@ namespace RestCharpCourse.Services
         private readonly RestClient _restClient;
         private readonly ITokenProvider _tokenProvider;
 
-        public RestService(ITokenProvider tokenProvider)
+        public RestService(ITokenProvider tokenProvider,string baseUrl)
         {
-            _restClient = new RestClient($"{SD.CouponAPIBase}");
+            _restClient = new RestClient(baseUrl);
             _tokenProvider = tokenProvider;
         }
 
