@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mango.Services.CouponAPI", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mango.Web", "Mango.Web\Mango.Web.csproj", "{75CC3B1F-A8F1-46CD-95A4-FC74586A4EBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.AuthAPI", "Mango.Services.AuthAPI\Mango.Services.AuthAPI.csproj", "{6806F0BB-6F7A-430C-A76E-024F3C121FB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mango.Services.AuthAPI", "Mango.Services.AuthAPI\Mango.Services.AuthAPI.csproj", "{6806F0BB-6F7A-430C-A76E-024F3C121FB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mango.Services.ProductAPI", "Mango.Services.ProductAPI\Mango.Services.ProductAPI.csproj", "{3BAB0F88-CF2C-4598-98E6-813924E5EFD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{6806F0BB-6F7A-430C-A76E-024F3C121FB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6806F0BB-6F7A-430C-A76E-024F3C121FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6806F0BB-6F7A-430C-A76E-024F3C121FB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BAB0F88-CF2C-4598-98E6-813924E5EFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BAB0F88-CF2C-4598-98E6-813924E5EFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BAB0F88-CF2C-4598-98E6-813924E5EFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BAB0F88-CF2C-4598-98E6-813924E5EFD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 		{6184F1C4-34CD-4F3D-B555-4A2E183E5362} = {6103EFA6-A08F-4F71-8062-3B3112CF3018}
 		{75CC3B1F-A8F1-46CD-95A4-FC74586A4EBE} = {9045440D-D5AD-4F5C-886E-052B78C52178}
 		{6806F0BB-6F7A-430C-A76E-024F3C121FB8} = {6103EFA6-A08F-4F71-8062-3B3112CF3018}
+		{3BAB0F88-CF2C-4598-98E6-813924E5EFD3} = {6103EFA6-A08F-4F71-8062-3B3112CF3018}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A229868-1930-4839-AF05-495012B8F587}
