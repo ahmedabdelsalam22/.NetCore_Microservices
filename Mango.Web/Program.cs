@@ -19,6 +19,7 @@ SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"]!;
 builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 builder.Services.AddScoped<IAuthRestService, AuthRestService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IProductRestService, ProductRestService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => {
