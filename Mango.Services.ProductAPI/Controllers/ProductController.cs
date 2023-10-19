@@ -140,5 +140,30 @@ namespace Mango.Services.ProductAPI.Controllers
             }
         }
 
+        [HttpDelete("product/delete/{id}")]
+        public async Task<IActionResult> DeleteProduct(int? id) 
+        {
+            try 
+            {
+                if (id == 0 || id == null)
+                {
+                    return BadRequest("no data found with this id");
+                }
+
+                Product product = await _productRepository.Get(filter: x => x.ProductId == id, tracked: false);
+                if (product == null)
+                {
+                    return BadRequest($"no product found with id: {id}");
+                }
+
+                await _productRepository.Delete(product);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
     }
 }
