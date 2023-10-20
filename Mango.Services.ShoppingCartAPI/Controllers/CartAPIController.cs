@@ -16,17 +16,15 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
     {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
-        private ResponseDTO _responseDTO;
 
         public CartAPIController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _responseDTO = new();
         }
 
         [HttpPost("cartUpdsert")]
-        public async Task<ResponseDTO> CartUpsert(CartDto cartDto)
+        public async Task<IActionResult> CartUpsert(CartDto cartDto)
         {
             try 
             {
@@ -46,7 +44,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 }
                 else {
                     // check if details has the same product
-                    var cartDetailsFromDb = await _context.CartDetails.FirstOrDefaultAsync(x=>x.ProductId == 
+                    var cartDetailsFromDb = await _context.CartDetails.AsNoTracking().FirstOrDefaultAsync(x=>x.ProductId == 
                                        cartDto.CartDetailsDtos.First().ProductId && x.CartHeaderId == cartHeaderFromDb.CartHeaderId);
 
                     if (cartDetailsFromDb == null)
@@ -60,21 +58,18 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     else {
                         // update count in cartDetails
                         cartDto.CartDetailsDtos.First().Count += cartDetailsFromDb.Count;
-                        cartDto.CartDetailsDtos.First().CartHeaderId += cartDetailsFromDb.CartHeaderId;
-                        cartDto.CartDetailsDtos.First().CartDetailsId += cartDetailsFromDb.CartDetailsId;
+                        cartDto.CartDetailsDtos.First().CartHeaderId = cartDetailsFromDb.CartHeaderId;
+                        cartDto.CartDetailsDtos.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;
 
                         _context.CartDetails.Update(_mapper.Map<CartDetails>(cartDto.CartDetailsDtos.First()));
                         await _context.SaveChangesAsync();
                     }
-                    _responseDTO.Result = cartDto;
                 }
-                return _responseDTO;
+                return Ok(cartDto);
             }
             catch(Exception ex) 
             {
-                _responseDTO.Message = ex.ToString();
-                _responseDTO.IsSuccess = false;
-                return _responseDTO;
+                return BadRequest(ex.ToString());
             }
         }
     }
