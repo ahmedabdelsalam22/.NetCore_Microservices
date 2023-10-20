@@ -1,4 +1,5 @@
-﻿@model Product
+﻿@using Mango.Web.Models.DTOS;
+@model ProductDto
 @{
     ViewData["Title"] = "ProductDetails";
 }
@@ -29,10 +30,10 @@
                                 </div>
 
                             </div>
-                           @*  <div class="row mx-0">
+                             <div class="row mx-0">
                                 <input asp-for="Count" class="form-control" />
                                 <span asp-validation-for="Count" class="text-danger"></span>
-                            </div> *@
+                            </div> 
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Web.Models;
+using Mango.Web.Models.DTOS;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +25,9 @@ namespace Mango.Web.Controllers
         {
             IEnumerable<Product> products = await _restService.GetAsync(url:$"{SD.ProductAPIBase}/api/products");
 
-            return View(products);
+            List<ProductDto> productsDto = _mapper.Map<List<ProductDto>>(products);
+
+            return View(productsDto);
         }
 
         [HttpGet]
@@ -37,6 +40,7 @@ namespace Mango.Web.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> CreateProduct(Product product)
         {
+
             await _restService.PostAsync(url: $"{SD.ProductAPIBase}/api/product/create", data: product);
 
             return RedirectToAction("Index");
