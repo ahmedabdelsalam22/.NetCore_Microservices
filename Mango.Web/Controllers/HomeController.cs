@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Mango.Web.Models;
+using Mango.Web.Models.DTOS;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -22,13 +24,18 @@ namespace Mango.Web.Controllers
         {
             IEnumerable<Product> products = await _restService.GetAsync(url: $"{SD.ProductAPIBase}/api/products");
 
-            return View(products);
-        }
+            List<ProductDto> productsDto = _mapper.Map<List<ProductDto>>(products);
 
+            return View(productsDto);
+        }
+        [Authorize]
         public async Task<IActionResult> ProductDetails(int productId) 
         {
             Product product = await _restService.GetByIdAsync(url: $"{SD.ProductAPIBase}/api/product/{productId}");
-            return View(product);
+
+            ProductDto productDto = _mapper.Map<ProductDto>(product);
+
+            return View(productDto);
         }
 
         public IActionResult Privacy()
