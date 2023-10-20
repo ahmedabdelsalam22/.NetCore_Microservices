@@ -25,6 +25,12 @@ namespace Mango.Web.Controllers
             return View(products);
         }
 
+        public async Task<IActionResult> ProductDetails(int productId) 
+        {
+            Product product = await _restService.GetByIdAsync(url: $"{SD.ProductAPIBase}/api/product/{productId}");
+            return View(product);
+        }
+
         public IActionResult Privacy()
         {
             return View();
