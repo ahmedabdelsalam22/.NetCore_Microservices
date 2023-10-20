@@ -20,7 +20,7 @@ namespace Mango.Services.ProductAPI.Data
                     Name = "Product 1",
                     Price = 50,
                     Description = "Description 1",
-                    ImageUrl = "https://placehold.co/603*403",
+                    ImageUrl = "https://placehold.co/600x400",
                     CategoryName = "category 1"
                 },
                 new Product()
@@ -29,7 +29,7 @@ namespace Mango.Services.ProductAPI.Data
                     Price = 30,
                     Name = "Product 2",
                     Description = "Description 2",
-                    ImageUrl = "https://placehold.co/603*403",
+                    ImageUrl = "https://placehold.co/600x400",
                     CategoryName = "category 2"
                 },
                 new Product()
@@ -38,7 +38,7 @@ namespace Mango.Services.ProductAPI.Data
                     Name = "Product 2",
                     Price = 40,
                     Description = "Description 2",
-                    ImageUrl = "https://placehold.co/603*403",
+                    ImageUrl = "https://placehold.co/600x400",
                     CategoryName = "category 2"
                 }
 

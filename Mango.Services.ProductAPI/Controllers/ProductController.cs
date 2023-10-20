@@ -11,7 +11,6 @@ namespace Mango.Services.ProductAPI.Controllers
 {
     [Route("api/")]
     [ApiController]
-    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -74,7 +73,7 @@ namespace Mango.Services.ProductAPI.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-
+        [Authorize]
         [HttpPut("product/update/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -113,6 +112,7 @@ namespace Mango.Services.ProductAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("product/create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -143,6 +143,7 @@ namespace Mango.Services.ProductAPI.Controllers
         }
 
         [HttpDelete("product/delete/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(int? id) 
         {
             try 
