@@ -41,5 +41,11 @@ namespace Mango.Web.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> DeleteProduct(int productId)
+        {
+            await _restService.Delete(url: $"{SD.ProductAPIBase}/api/product/delete/{productId}");
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
