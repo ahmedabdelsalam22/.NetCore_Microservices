@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Services.ShoppingCartAPI.Data;
+using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dtos;
 using Mango.Services.ShoppingCartAPI.Models.DTOS;
 using Microsoft.AspNetCore.Http;
@@ -32,12 +33,20 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 if (cartHeaderFromDb == null)
                 {
                     // create cartHeader and details 
+                    CartHeader cartHeader = _mapper.Map<CartHeader>(cartDto.CartHeaderDto);
+                    await _context.CartHeaders.AddAsync(cartHeader);
+                    await _context.SaveChangesAsync();
+
+                    cartDto.CartDetailsDtos.First().CartHeaderId = cartHeader.CartHeaderId;
+
+                    await _context.CartDetails.AddAsync(_mapper.Map<CartDetails>(cartDto.CartDetailsDtos.First()));
+                    await _context.SaveChangesAsync();
 
                 }
                 else {
                     // check if details has the same product
                     var cartDetailsFromDb = await _context.CartDetails.FirstOrDefaultAsync(x=>x.ProductId == 
-                                       cartDto.CartDetails.First().ProductId && x.CartHeaderId == cartHeaderFromDb.CartHeaderId);
+                                       cartDto.CartDetailsDtos.First().ProductId && x.CartHeaderId == cartHeaderFromDb.CartHeaderId);
 
                     if (cartDetailsFromDb == null)
                     {
