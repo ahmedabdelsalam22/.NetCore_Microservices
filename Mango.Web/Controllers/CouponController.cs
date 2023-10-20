@@ -25,7 +25,7 @@ namespace Mango.Web.Controllers
 
             return View(coupons);
         }
-
+        [HttpGet]
         public IActionResult CreateCoupon() 
         {
             return View();
