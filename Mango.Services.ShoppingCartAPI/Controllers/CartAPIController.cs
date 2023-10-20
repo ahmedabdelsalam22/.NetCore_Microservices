@@ -6,6 +6,7 @@ using Mango.Services.ShoppingCartAPI.Models.DTOS;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {
@@ -51,14 +52,25 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     if (cartDetailsFromDb == null)
                     {
                         // create cartDetails 
+                        cartDto.CartDetailsDtos.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
+
+                        await _context.CartDetails.AddAsync(_mapper.Map<CartDetails>(cartDto.CartDetailsDtos.First()));
+                        await _context.SaveChangesAsync();
                     }
                     else {
                         // update count in cartDetails
+                        cartDto.CartDetailsDtos.First().Count += cartDetailsFromDb.Count;
+                        cartDto.CartDetailsDtos.First().CartHeaderId += cartDetailsFromDb.CartHeaderId;
+                        cartDto.CartDetailsDtos.First().CartDetailsId += cartDetailsFromDb.CartDetailsId;
+
+                        _context.CartDetails.Update(_mapper.Map<CartDetails>(cartDto.CartDetailsDtos.First()));
+                        await _context.SaveChangesAsync();
                     }
-
+                    _responseDTO.Result = cartDto;
                 }
-
-            }catch(Exception ex) 
+                return _responseDTO;
+            }
+            catch(Exception ex) 
             {
                 _responseDTO.Message = ex.ToString();
                 _responseDTO.IsSuccess = false;
