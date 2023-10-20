@@ -26,5 +26,26 @@ namespace Mango.Web.Controllers
 
             return View(products);
         }
+
+        [HttpGet]
+        public IActionResult CreateProduct()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> CreateProduct(Product product)
+        {
+            await _restService.PostAsync(url: $"{SD.ProductAPIBase}/api/product/create", data: product);
+
+            return RedirectToAction("Index");
+        }
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> DeleteProduct(int productId)
+        {
+            await _restService.Delete(url: $"{SD.ProductAPIBase}/api/product/delete/{productId}");
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -36,7 +36,7 @@
                 @if (User.IsInRole("ADMIN"))
                 {
                     <td>
-                        <a type="submit" asp-action="DeleteProduct" asp-route-couponId="@n.ProductId" class="btn-danger">Delete</a>
+                        <a type="submit" asp-action="DeleteProduct" asp-route-productId="@n.ProductId" class="btn-danger">Delete</a>
                     </td>
                 }
             </tr>
