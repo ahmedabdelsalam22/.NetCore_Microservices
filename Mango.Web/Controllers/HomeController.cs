@@ -1,4 +1,7 @@
-﻿using Mango.Web.Models;
+﻿using AutoMapper;
+using Mango.Web.Models;
+using Mango.Web.Service.IService;
+using Mango.Web.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,16 +9,20 @@ namespace Mango.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IProductRestService _restService;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProductRestService restService, IMapper mapper)
         {
-            _logger = logger;
+            _restService = restService;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IEnumerable<Product> products = await _restService.GetAsync(url: $"{SD.ProductAPIBase}/api/products");
+
+            return View(products);
         }
 
         public IActionResult Privacy()
