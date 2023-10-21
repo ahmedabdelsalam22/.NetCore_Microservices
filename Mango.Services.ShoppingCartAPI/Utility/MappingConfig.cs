@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Mango.Web.Models;
-using Mango.Web.Models.DTOS;
 
 namespace Mango.Web.Utility
 {
@@ -8,7 +6,6 @@ namespace Mango.Web.Utility
     {
         public MappingConfig()
         {
-            CreateMap<Product, ProductDto>();
         }
     }
 }
