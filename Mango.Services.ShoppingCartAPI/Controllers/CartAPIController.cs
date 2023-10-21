@@ -20,12 +20,13 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
         private readonly IProductRestService _productRestService;
-
-        public CartAPIController(ApplicationDbContext context, IMapper mapper, IProductRestService productRestService)
+        private readonly ICouponRestService _couponRestService;
+        public CartAPIController(ApplicationDbContext context, IMapper mapper, IProductRestService productRestService,ICouponRestService couponRestService)
         {
             _context = context;
             _mapper = mapper;
             _productRestService = productRestService;
+            _couponRestService = couponRestService;
         }
 
 
@@ -41,7 +42,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 cart.CartDetailsDtos = _mapper.Map<IEnumerable<CartDetailsDto>>(_context.CartDetails
                     .Where(u => u.CartHeaderId == cart.CartHeaderDto.CartHeaderId));
 
-                List<ProductDto> productDtos = await _productRestService.GetAllAsync(url:$"{SD.ProductAPIUrl}/api/products");
+                List<ProductDto> productDtos = await _productRestService.GetAllProducts();
 
 
                 foreach (var item in cart.CartDetailsDtos)
@@ -49,6 +50,18 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
                     cart.CartHeaderDto.CartTotal += (item.Count * item.Product.Price); // here we should get product from "ProductAPI" which means microservices. 
                 }
+
+                //apply coupon if any
+                //if (!string.IsNullOrEmpty(cart.CartHeaderDto.CouponCode))
+                //{
+                //    CouponDto coupon = await _couponRestService.GetCoupon(cart.CartHeaderDto.CouponCode);
+                //    if (coupon != null && cart.CartHeaderDto.CartTotal > coupon.MinAmount)
+                //    {
+                //        cart.CartHeaderDto.CartTotal -= coupon.DiscountAmount;
+                //        cart.CartHeaderDto.Discount = coupon.DiscountAmount;
+                //    }
+                //}
+
                 return Ok(cart);
             }
             catch (Exception ex)
