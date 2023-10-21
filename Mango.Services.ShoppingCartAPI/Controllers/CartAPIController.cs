@@ -5,6 +5,7 @@ using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dtos;
 using Mango.Services.ShoppingCartAPI.Models.DTOS;
 using Mango.Services.ShoppingCartAPI.Services.IServices;
+using Mango.Services.ShoppingCartAPI.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 cart.CartDetailsDtos = _mapper.Map<IEnumerable<CartDetailsDto>>(_context.CartDetails
                     .Where(u => u.CartHeaderId == cart.CartHeaderDto.CartHeaderId));
 
-                List<ProductDto> productDtos = await _productRestService.GetProducts();
+                List<ProductDto> productDtos = await _productRestService.GetAllAsync(url:$"{SD.ProductAPIUrl}/api/products");
 
 
                 foreach (var item in cart.CartDetailsDtos)

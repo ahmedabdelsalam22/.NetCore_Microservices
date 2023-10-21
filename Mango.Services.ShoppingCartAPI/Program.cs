@@ -12,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-SD.ProductAPIUrl = builder.Configuration["ServiceUrls:ProductAPIUrl"];
+SD.ProductAPIUrl = builder.Configuration["ServiceUrls:ProductAPIUrl"]; 
+SD.CouponAPIUrl = builder.Configuration["ServiceUrls:CouponAPIUrl"]; 
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,6 +51,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServe
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddScoped<IProductRestService, ProductRestService>();
+builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 
 
 builder.AddAppAuthintication();

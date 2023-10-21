@@ -2,7 +2,7 @@
 
 namespace Mango.Services.ShoppingCartAPI.Services.IServices
 {
-    public interface IProductRestService:IRestService<ProductDto>
+    public interface ICouponRestService : IRestService<CouponDto>
     {
     }
 }
