@@ -2,24 +2,23 @@
 using Mango.Services.ShoppingCartAPI.Services.IServices;
 using Mango.Services.ShoppingCartAPI.Utility;
 using RestSharp;
-using System;
 
 namespace Mango.Services.ShoppingCartAPI.Services
 {
-    public class ProductRestService : IProductRestService
+    public class CouponRestService : ICouponRestService
     {
         private readonly RestClient restClient;
 
-        public ProductRestService()
+        public CouponRestService()
         {
-            restClient = new RestClient(SD.ProductAPIUrl);
+            restClient = new RestClient(SD.CouponAPIUrl);
         }
 
-        public async Task<List<ProductDto>> GetAllProducts()
+        public async Task<CouponDto> GetCouponByCouponCode(string couponCode)
         {
-            var request = new RestRequest("/api/products", Method.Get);
+            var request = new RestRequest($"/api/couponapi/couponCode/{couponCode}", Method.Get);
 
-            var response = await restClient.ExecuteGetAsync<List<ProductDto>>(request);
+            var response = await restClient.ExecuteGetAsync<CouponDto>(request);
 
             if (response.Data == null)
             {
