@@ -38,7 +38,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 
                 foreach (var item in cart.CartDetailsDtos)
                 {
-                    cart.CartHeaderDto.CartTotal += (item.Count * item.Product.Price);
+                    cart.CartHeaderDto.CartTotal += (item.Count * item.Product.Price); // here we should get product from "ProductAPI" which means microservices. 
                 }
                 return Ok(cart);
             }
