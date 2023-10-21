@@ -23,6 +23,31 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             _mapper = mapper;
         }
 
+
+        [HttpGet("getCart/{userId}")]
+        public async Task<ActionResult> GetCart(string userId)
+        {
+            try 
+            {
+                CartDto cart = new()
+                {
+                    CartHeaderDto = _mapper.Map<CartHeaderDto>(_context.CartHeaders.First(u => u.UserId == userId))
+                };
+                cart.CartDetailsDtos = _mapper.Map<IEnumerable<CartDetailsDto>>(_context.CartDetails
+                    .Where(u => u.CartHeaderId == cart.CartHeaderDto.CartHeaderId));
+
+                foreach (var item in cart.CartDetailsDtos)
+                {
+                    cart.CartHeaderDto.CartTotal += (item.Count * item.Product.Price); // here we should get product from "ProductAPI" which means microservices. 
+                }
+                return Ok(cart);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
         [HttpPost("cartUpdsert")]
         public async Task<IActionResult> CartUpsert(CartDto cartDto)
         {
