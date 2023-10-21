@@ -16,6 +16,7 @@ builder.Services.AddHttpContextAccessor();
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"]!;
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"]!;
+SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"]!;
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -23,6 +24,7 @@ builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 builder.Services.AddScoped<IAuthRestService, AuthRestService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IProductRestService, ProductRestService>();
+builder.Services.AddScoped<ICartRestService, CartRestService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => {
