@@ -150,6 +150,22 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [HttpPost("RemoveCoupon")]
+        public async Task<object> RemoveCoupon([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                var cartFromDb = await _context.CartHeaders.FirstAsync(u => u.UserId == cartDto.CartHeaderDto.UserId);
+                cartFromDb.CouponCode = "";
+                _context.CartHeaders.Update(cartFromDb);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
 
     }
 }
