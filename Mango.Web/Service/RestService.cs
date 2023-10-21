@@ -85,7 +85,7 @@ namespace RestCharpCourse.Services
             return response.Data!;
         }
 
-        public async Task PostAsync(string url, T data, bool withBearer = true)
+        public async Task<RestResponse> PostAsync(string url, T data, bool withBearer = true)
         {
             var request = new RestRequest(url, Method.Post);
 
@@ -97,8 +97,7 @@ namespace RestCharpCourse.Services
                 request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
             }
 
-
-            await _restClient.ExecutePostAsync(request);
+           return await _restClient.ExecutePostAsync(request);
         }
 
         public async Task<T> UpdateAsync(string url, T data, bool withBearer = true)

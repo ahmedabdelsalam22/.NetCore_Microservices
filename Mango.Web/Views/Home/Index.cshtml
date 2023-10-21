@@ -4,8 +4,16 @@
     ViewData["Title"] = "Home Page";
 }
 
+
+<div class="text-end">
+    <partial name="_Notification" />
+</div>
+
 <form>
+
+
     <div class="container row">
+
        @foreach(var m in Model)
        {
             <div class="col-12 col-md-6 col-lg-4">
