@@ -1,6 +1,7 @@
 ﻿@using Mango.Web.Models.DTOS;
 @model CartDto
 
+<partial name="_Notification">
 
 @if (Model.CartHeaderDto != null && Model.CartDetailsDtos?.Count() > 0)
 {
