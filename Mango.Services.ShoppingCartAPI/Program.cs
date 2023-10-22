@@ -51,6 +51,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServe
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddScoped<IProductRestService, ProductRestService>();
+
+//builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+
 builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 
 

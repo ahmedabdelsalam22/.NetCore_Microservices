@@ -60,5 +60,19 @@ namespace Mango.Web.Controllers
             }
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            string url = $"{SD.ShoppingCartAPIBase}/api/cart/ApplyCoupon";
+
+            cartDto.CartHeaderDto.CouponCode = "";
+            var response = await _cartRestService.PostAsync(url: url, data: cartDto);
+            if (response.IsSuccessful)
+            {
+                TempData["success"] = "Cart updated successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
     }
 }
