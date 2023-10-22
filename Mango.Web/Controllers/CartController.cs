@@ -31,5 +31,34 @@ namespace Mango.Web.Controllers
             var response = await _cartRestService.GetByIdAsync(url: url);
             return response;
         }
+
+        public async Task<IActionResult> Remove(int cartDetailsId)
+        {
+
+            string url = $"{SD.ShoppingCartAPIBase}/api/cart/RemoveCart";
+
+            var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+            var response = await _cartRestService.PostToDeleteCart(url:url , cartDetailsId: cartDetailsId);
+            if (response.IsSuccessful)
+            {
+                TempData["success"] = "Cart updated successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+            string url = $"{SD.ShoppingCartAPIBase}/api/cart/ApplyCoupon";
+
+            var response = await _cartRestService.PostAsync(url: url, data: cartDto);
+            if (response.IsSuccessful)
+            {
+                TempData["success"] = "Cart updated successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
     }
 }

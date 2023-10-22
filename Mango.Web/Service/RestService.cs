@@ -20,7 +20,7 @@ namespace RestCharpCourse.Services
         }
 
 
-        public async Task Delete(string url,bool withBearer = true)
+        public async Task<RestResponse> Delete(string url,bool withBearer = true)
         {
             var request = new RestRequest(url, Method.Delete);
 
@@ -36,6 +36,7 @@ namespace RestCharpCourse.Services
             {
                 Console.WriteLine($"ERROR: {response.ErrorException?.Message}");
             }
+            return response;
         }
 
         public async Task<List<T>> GetAsync(string url, bool withBearer = true)
@@ -98,6 +99,21 @@ namespace RestCharpCourse.Services
             }
 
            return await _restClient.ExecutePostAsync(request);
+        }
+
+        public async Task<RestResponse> PostToDeleteCart(string url, int cartDetailsId, bool withBearer = true)
+        {
+            var request = new RestRequest(url, Method.Post);
+
+            request.AddBody(cartDetailsId);
+
+            request.AddHeader("Accept", "application/json");
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
+            return await _restClient.ExecutePostAsync(request);
         }
 
         public async Task<T> UpdateAsync(string url, T data, bool withBearer = true)
