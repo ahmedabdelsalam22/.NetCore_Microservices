@@ -76,10 +76,14 @@ namespace Mango.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EmailCart(CartDto cartDto)
+        public async Task<IActionResult> EmailCart()
         {
-            string url = $"{SD.ShoppingCartAPIBase}/api/cart/EmailCartRequest";
+            CartDto cartDto = await GetCartBasedInLoggerUser();
 
+            cartDto.CartHeaderDto.Email = User.Claims.Where(x => x.Type == JwtRegisteredClaimNames.Email)?.FirstOrDefault()?.Value;
+
+
+            string url = $"{SD.ShoppingCartAPIBase}/api/cart/EmailCartRequest";
             var response = await _cartRestService.PostAsync(url: url, data: cartDto);
             if (response.IsSuccessful)
             {
