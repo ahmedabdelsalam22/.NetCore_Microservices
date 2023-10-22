@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Mango.Services.ShoppingCartAPI.Utility;
 using Mango.Services.ShoppingCartAPI.Services.IServices;
 using Mango.Services.ShoppingCartAPI.Services;
+using Mango.MessageBus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,8 @@ builder.Services.AddScoped<IProductRestService, ProductRestService>();
 //builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
 builder.Services.AddScoped<ICouponRestService, CouponRestService>();
+
+builder.Services.AddScoped<IMessageBus,MessageBus>();
 
 
 builder.AddAppAuthintication();
