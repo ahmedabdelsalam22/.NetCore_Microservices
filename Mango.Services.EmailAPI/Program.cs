@@ -1,7 +1,9 @@
 using Mango.Services.EmailAPI.Data;
 using Mango.Services.EmailAPI.Extenstions;
 using Mango.Services.EmailAPI.Messaging;
+using Mango.Services.EmailAPI.Service;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,11 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(connectionString: connectionString));
+
+// to send email from azure (singleton servive) to ApplicationDbContext context (scope service) .. to fix that we implement this logic
+var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 var app = builder.Build();
 
