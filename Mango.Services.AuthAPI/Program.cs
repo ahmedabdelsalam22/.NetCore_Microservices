@@ -1,3 +1,4 @@
+using Mango.MessageBus;
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Service;
 using Mango.Services.AuthAPI.Service.IService;
@@ -31,6 +32,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 var app = builder.Build();
 

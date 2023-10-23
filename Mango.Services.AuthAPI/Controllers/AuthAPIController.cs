@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Mango.MessageBus;
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Models.DTOS;
 using Mango.Services.AuthAPI.Service.IService;
@@ -16,11 +17,15 @@ namespace Mango.Services.AuthAPI.Controllers
     {
         private readonly IAuthService _service;
         private readonly APIResponse _apiResponse;
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _configuration;
 
-        public AuthAPIController(IAuthService service, IConfiguration configuration)
+        public AuthAPIController(IAuthService service, IConfiguration configuration, IMessageBus messageBus)
         {
+            _configuration = configuration;
             _service = service;
             _apiResponse = new();
+            _messageBus = messageBus;
         }
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseDTO>> Login([FromBody] LoginRequestDTO loginRequestDTO) 
@@ -57,6 +62,12 @@ namespace Mango.Services.AuthAPI.Controllers
 
             if (userDTO != null)
             {
+                // TODO: send message (user email) to azure queue message 
+
+                //issue UserEmailQueue equal null .. so i will put "authuseremail" hard code 
+                string emailQueueName = _configuration.GetValue<string>("TopicAndQueueNames:UserEmailQueue")!; 
+                await _messageBus.PublishMessage(message:userDTO.Email , topic_queue_name: "authuseremail"); // so i put "authuseremail" hard code 
+
                 return userDTO;
             }
             else
