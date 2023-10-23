@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Mango.Services.EmailAPI.Models.DTOS;
+using Mango.Services.EmailAPI.Service;
 using Newtonsoft.Json;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -14,10 +15,14 @@ namespace Mango.Services.EmailAPI.Messaging
 
         private ServiceBusProcessor _emailCartProcessor;
 
-        public AzureServiceBusConsumer(IConfiguration configuration)
+        private readonly EmailService _emailService; //Cause i registered it as singleton
+
+        public AzureServiceBusConsumer(IConfiguration configuration,EmailService emailService)
         {
-            serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString")!;
-            emailShoppingCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:emailshoppingcart")!;
+            _emailService = emailService;
+            _configuration = configuration;
+            serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
+            emailShoppingCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue")!;
 
 
             var client = new ServiceBusClient(serviceBusConnectionString);
@@ -30,6 +35,7 @@ namespace Mango.Services.EmailAPI.Messaging
         {
             _emailCartProcessor.ProcessMessageAsync += OnEmailCartRequestRecieved;
             _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
+            await _emailCartProcessor.StartProcessingAsync();
         }
         public async Task Stop() // envoking when api is not runnig
         {
@@ -46,6 +52,8 @@ namespace Mango.Services.EmailAPI.Messaging
             try
             {
                 //TODO: try to log email
+                await _emailService.EmailCartAndLog(objMessage);
+
                 await args.CompleteMessageAsync(args.Message);
             }
             catch (Exception ex) 
