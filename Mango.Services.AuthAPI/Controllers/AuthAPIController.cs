@@ -65,7 +65,7 @@ namespace Mango.Services.AuthAPI.Controllers
                 // TODO: send message (user email) to azure queue message 
 
                 //issue UserEmailQueue equal null .. so i will put "authuseremail" hard code 
-                string emailQueueName = _configuration.GetValue<string>("TopicAndQueueNames:UserEmailQueue")!; 
+                string emailQueueName = _configuration.GetValue<string>("TopicAndQueueNames:UserEmailQueue")!;
                 await _messageBus.PublishMessage(message:userDTO.Email , topic_queue_name: "authuseremail"); // so i put "authuseremail" hard code 
 
                 return userDTO;
