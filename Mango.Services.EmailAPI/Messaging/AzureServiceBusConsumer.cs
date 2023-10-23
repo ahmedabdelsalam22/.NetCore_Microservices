@@ -16,8 +16,9 @@ namespace Mango.Services.EmailAPI.Messaging
 
         public AzureServiceBusConsumer(IConfiguration configuration)
         {
-            serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString")!;
-            emailShoppingCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:emailshoppingcart")!;
+            _configuration = configuration;
+            serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
+            emailShoppingCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue")!;
 
 
             var client = new ServiceBusClient(serviceBusConnectionString);
@@ -30,6 +31,7 @@ namespace Mango.Services.EmailAPI.Messaging
         {
             _emailCartProcessor.ProcessMessageAsync += OnEmailCartRequestRecieved;
             _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
+            await _emailCartProcessor.StartProcessingAsync();
         }
         public async Task Stop() // envoking when api is not runnig
         {
