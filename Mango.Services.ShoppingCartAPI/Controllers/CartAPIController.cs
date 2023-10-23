@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using Mango.MessageBus;
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dtos;
@@ -21,12 +22,17 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private IMapper _mapper;
         private readonly IProductRestService _productRestService;
         private readonly ICouponRestService _couponRestService;
-        public CartAPIController(ApplicationDbContext context, IMapper mapper, IProductRestService productRestService,ICouponRestService couponRestService)
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _configuration;
+        public CartAPIController(ApplicationDbContext context, IMapper mapper, IProductRestService productRestService,
+            ICouponRestService couponRestService,IMessageBus messageBus, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
             _productRestService = productRestService;
             _couponRestService = couponRestService;
+            _messageBus = messageBus;
+            _configuration = configuration;
         }
 
 
@@ -157,6 +163,21 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 cartFromDb.CouponCode = cartDto.CartHeaderDto.CouponCode;
                 _context.CartHeaders.Update(cartFromDb);
                 await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        [HttpPost("EmailCartRequest")]
+        public async Task<object> EmailCartRequest([FromBody] CartDto cartDto)
+        {
+            string emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue");
+            try
+            {
+                await _messageBus.PublishMessage(message:cartDto , topic_queue_name: emailCartQueue);
                 return Ok();
             }
             catch (Exception ex)

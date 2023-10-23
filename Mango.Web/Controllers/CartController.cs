@@ -81,5 +81,23 @@ namespace Mango.Web.Controllers
             }
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EmailCart()
+        {
+            CartDto cartDto = await GetCartBasedInLoggerUser();
+
+            cartDto.CartHeaderDto.Email = User.Claims.Where(x => x.Type == JwtRegisteredClaimNames.Email)?.FirstOrDefault()?.Value;
+
+
+            string url = $"{SD.ShoppingCartAPIBase}/api/cart/EmailCartRequest";
+            var response = await _cartRestService.PostAsync(url: url, data: cartDto);
+            if (response.IsSuccessful)
+            {
+                TempData["success"] = "Email will be processed and sent shortly";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
     }
 }
