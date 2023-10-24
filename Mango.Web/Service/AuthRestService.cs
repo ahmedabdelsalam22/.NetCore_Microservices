@@ -1,9 +1,10 @@
-﻿using Mango.FrontEnd.Models.DTOS;
+﻿using Mango.FrontEnd.Models.Dtos;
 using Mango.Web.RestService.IRestService;
 using RestSharp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Security.Policy;
 using Mango.Web.Utility;
+using Mango.FrontEnd.Models.Dtos;
 
 namespace Mango.Web.RestService
 {

@@ -1,5 +1,4 @@
-﻿using Mango.FrontEnd.Models.DTOS;
-using Mango.Web.Models.DTOS;
+﻿using Mango.Web.Models.Dtos;
 using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -10,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Mango.Web.RestService.IRestService;
 using Mango.Web.Service.IService;
+using Mango.FrontEnd.Models.Dtos;
 
 namespace Mango.Web.Controllers
 {

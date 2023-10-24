@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Web.Models;
-using Mango.Web.Models.DTOS;
+using Mango.Web.Models.Dtos;
 
 namespace Mango.Web.Utility
 {

@@ -1,4 +1,4 @@
-﻿using Mango.Web.Models.DTOS;
+﻿using Mango.Web.Models.Dtos;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +10,11 @@ namespace Mango.Web.Controllers
     public class CartController : Controller
     {
         private readonly ICartRestService _cartRestService;
-
-        public CartController(ICartRestService cartRestService)
+        private readonly IOrderRestService _orderRestService;
+        public CartController(ICartRestService cartRestService, IOrderRestService orderRestService)
         {
             _cartRestService = cartRestService;
+            _orderRestService = orderRestService;
         }
         [Authorize]
         public async Task<IActionResult> CartIndex()
@@ -27,6 +28,24 @@ namespace Mango.Web.Controllers
         {
             var cartDto = await GetCartBasedInLoggerUser();
             return View(cartDto);
+        }
+
+        [HttpPost]
+        [ActionName("Checkout")]
+        public async Task<IActionResult> Checkout(CartDto cartDto)
+        {
+            CartDto cart = await GetCartBasedInLoggerUser();
+            cart.CartHeaderDto.Phone = cartDto.CartHeaderDto.Phone;
+            cart.CartHeaderDto.Email = cartDto.CartHeaderDto.Email;
+            cart.CartHeaderDto.Name = cartDto.CartHeaderDto.Name;
+
+            var response = await _orderRestService.CreateOrder(cart);
+
+            if (response != null)
+            {
+                //get stripe session and redirect to stripe to place order
+            }
+            return View();
         }
 
         public async Task<CartDto> GetCartBasedInLoggerUser()

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Web.Models;
-using Mango.Web.Models.DTOS;
+using Mango.Web.Models.Dtos;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;

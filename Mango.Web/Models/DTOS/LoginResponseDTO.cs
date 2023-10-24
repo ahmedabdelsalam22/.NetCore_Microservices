@@ -1,4 +1,4 @@
-﻿namespace Mango.FrontEnd.Models.DTOS
+﻿namespace Mango.FrontEnd.Models.Dtos
 {
     public class LoginResponseDTO
     {
