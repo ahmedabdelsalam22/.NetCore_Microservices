@@ -1,4 +1,4 @@
-﻿namespace Mango.Services.OrderAPI.Models.Dtos
+﻿namespace Mango.Web.Models.Dtos
 {
     public class OrderHeaderDto
     {

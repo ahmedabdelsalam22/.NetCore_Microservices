@@ -4,8 +4,8 @@ using RestSharp;
 
 namespace Mango.Web.Service.IService
 {
-    public interface ICartRestService : IRestService<CartDto>
+    public interface IOrderRestService 
     {
-        
+        Task<OrderHeaderDto> CreateOrder(CartDto cartDto, bool withBearer = true);
     }
 }

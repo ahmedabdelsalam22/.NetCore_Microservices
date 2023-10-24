@@ -1,4 +1,4 @@
-﻿using Mango.FrontEnd.Models.DTOS;
+﻿using Mango.FrontEnd.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Web.RestService.IRestService

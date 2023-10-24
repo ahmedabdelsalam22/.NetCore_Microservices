@@ -1,4 +1,4 @@
-﻿using Mango.Web.Models.DTOS;
+﻿using Mango.Web.Models.Dtos;
 using Mango.Web.Service.IService;
 using RestCharpCourse.Services;
 

@@ -1,5 +1,5 @@
 ﻿using Mango.Web.Models;
-using Mango.Web.Models.DTOS;
+using Mango.Web.Models.Dtos;
 using Mango.Web.RestService;
 using Mango.Web.RestService.IRestService;
 using Mango.Web.Utility;

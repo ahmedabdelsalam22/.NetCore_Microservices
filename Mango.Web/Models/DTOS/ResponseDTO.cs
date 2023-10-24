@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Mango.Web.Models.DTOS
+namespace Mango.Web.Models.Dtos
 {
     public class ResponseDTO
     {

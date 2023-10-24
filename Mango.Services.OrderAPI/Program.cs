@@ -53,6 +53,7 @@ builder.Services.AddScoped<IProductRestService, ProductRestService>();
 builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 //builder.Services.AddHttpContextAccessor();
 //builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
