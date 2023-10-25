@@ -30,6 +30,7 @@ namespace Mango.Web.Controllers
             return View(cartDto);
         }
 
+
         [HttpPost]
         [ActionName("Checkout")]
         public async Task<IActionResult> Checkout(CartDto cartDto)
@@ -46,6 +47,11 @@ namespace Mango.Web.Controllers
                 //get stripe session and redirect to stripe to place order
             }
             return View();
+        }
+
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            return View(orderId);
         }
 
         public async Task<CartDto> GetCartBasedInLoggerUser()
@@ -118,5 +124,7 @@ namespace Mango.Web.Controllers
             }
             return View();
         }
+
+       
     }
 }
