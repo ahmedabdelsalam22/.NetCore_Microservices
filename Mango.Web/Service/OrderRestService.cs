@@ -35,5 +35,22 @@ namespace Mango.Web.Service
 
             return resposne.Data;
         }
+
+        public async Task<StripeRequestDto> CreateStripeSession(StripeRequestDto stripeRequestDto, bool withBearer = true)
+        {
+            var request = new RestRequest("/api/order/CreateStripeSession", Method.Post);
+
+            request.AddJsonBody(stripeRequestDto);
+
+            request.AddHeader("Accept", "application/json");
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
+            var resposne = await _restClient.ExecutePostAsync<StripeRequestDto>(request);
+
+            return resposne.Data;
+        }
     }
 }
