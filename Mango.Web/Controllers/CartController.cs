@@ -40,11 +40,25 @@ namespace Mango.Web.Controllers
             cart.CartHeaderDto.Email = cartDto.CartHeaderDto.Email;
             cart.CartHeaderDto.Name = cartDto.CartHeaderDto.Name;
 
-            var response = await _orderRestService.CreateOrder(cart);
+            var response = await _orderRestService.CreateOrder(cart); // the response is "OrderHeaderDto"
 
             if (response != null)
             {
                 //get stripe session and redirect to stripe to place order
+
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
+                StripeRequestDto stripeRequestDto = new()
+                {
+                    ApprovedUrl = domain + "cart/Confirmation?orderId=" + response.OrderHeaderId, 
+                    CancelUrl = domain + "cart/checkout",
+                    OrderHeaderDto = response
+                };
+
+                var stripeResponse = await _orderRestService.CreateStripeSession(stripeRequestDto);
+
+                Response.Headers.Add("Location", stripeResponse.StripeSessionUrl);
+                return new StatusCodeResult(303);
             }
             return View();
         }

@@ -98,7 +98,7 @@ namespace Mango.Services.OrderAPI.Controllers
             OrderHeader orderHeader = _db.OrderHeaders.First(x=>x.OrderHeaderId == stripeRequestDto.OrderHeaderDto.OrderHeaderId);
 
             orderHeader.StripeSessionId = session.Id;
-            _db.SaveChanges();
+           await _db.SaveChangesAsync();
 
             return Ok(stripeRequestDto);
         }
