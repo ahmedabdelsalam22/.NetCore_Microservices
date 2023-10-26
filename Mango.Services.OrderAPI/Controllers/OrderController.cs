@@ -121,8 +121,8 @@ namespace Mango.Services.OrderAPI.Controllers
 
 
         [Authorize]
-        [HttpPost("ValidateStripeSession")]
-        public async Task<IActionResult> ValidateStripeSession([FromBody] int orderHeaderId)
+        [HttpPost("ValidateStripeSession/{orderHeaderId}")]
+        public async Task<ActionResult<OrderHeaderDto>> ValidateStripeSession(int orderHeaderId)
         {
             try
             {
