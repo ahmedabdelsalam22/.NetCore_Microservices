@@ -68,6 +68,15 @@ namespace Mango.Services.OrderAPI.Controllers
                 CancelUrl = stripeRequestDto.CancelUrl,
                 LineItems = new List<SessionLineItemOptions>(),
                 Mode = "payment",
+                
+            };
+
+            var DiscountObj = new List<SessionDiscountOptions>() 
+            {
+                new SessionDiscountOptions
+                {
+                    Coupon = stripeRequestDto.OrderHeaderDto.CouponCode
+                }
             };
 
 
@@ -89,6 +98,13 @@ namespace Mango.Services.OrderAPI.Controllers
                 options.LineItems.Add(sessionLineItem);
             }
 
+
+            // apply discoun coupon in stripe 
+            if (stripeRequestDto.OrderHeaderDto.Discount > 0) 
+            {
+                options.Discounts = DiscountObj;
+            }
+
             var service = new SessionService();
             Session session = service.Create(options);
 
@@ -101,6 +117,39 @@ namespace Mango.Services.OrderAPI.Controllers
            await _db.SaveChangesAsync();
 
             return Ok(stripeRequestDto);
+        }
+
+
+        [Authorize]
+        [HttpPost("ValidateStripeSession")]
+        public async Task<IActionResult> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            try
+            {
+
+                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.StripeSessionId);
+
+                //PaymentIntent obj to can access payment status 
+                var paymentIntentService = new PaymentIntentService();
+                PaymentIntent paymentIntent = paymentIntentService.Get(session.PaymentIntentId);
+
+                if (paymentIntent.Status == "succeeded")
+                {
+                    //then payment was successful
+                    orderHeader.PaymentIntentId = paymentIntent.Id;
+                    orderHeader.Status = SD.Status_Approved;
+                    _db.SaveChanges();
+                    
+                }
+                return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(ex.ToString());
+            }
         }
     }
 }
