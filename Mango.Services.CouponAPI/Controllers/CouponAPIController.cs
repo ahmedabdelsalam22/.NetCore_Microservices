@@ -110,6 +110,19 @@ namespace Mango.Services.CouponAPI.Controllers
                 await unitOfWork.couponRepository.Create(coupon);
                 await unitOfWork.Save();
 
+                // add coupon in stripe Payment Gateway
+
+
+                var options = new Stripe.CouponCreateOptions
+                {
+                    AmountOff = (long) (coupon.DiscountAmount*100),
+                    Name = coupon.CouponCode,
+                    Currency = "usd",
+                    Id = coupon.CouponCode
+                };
+                var service = new Stripe.CouponService();
+                service.Create(options);
+
                 Coupon couponFromDb = await unitOfWork.couponRepository.Get(filter: x => x.CouponCode.ToLower() == couponCreateDTO.CouponCode.ToLower());
 
                 CouponDTO couponDTO = mapper.Map<CouponDTO>(couponFromDb);
