@@ -52,5 +52,20 @@ namespace Mango.Web.Service
 
             return resposne.Data;
         }
+
+        public async Task<OrderHeaderDto> ValidateStripeSession(int orderHeaderId, bool withBearer = true)
+        {
+            var request = new RestRequest($"/api/order/ValidateStripeSession/{orderHeaderId}", Method.Post);
+
+            request.AddHeader("Accept", "application/json");
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
+            var resposne = await _restClient.ExecutePostAsync<OrderHeaderDto>(request);
+
+            return resposne.Data;
+        }
     }
 }

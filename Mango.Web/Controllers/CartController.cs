@@ -65,6 +65,15 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> Confirmation(int orderId)
         {
+            var response = await _orderRestService.ValidateStripeSession(orderId);
+            if (response != null)
+            {
+                if (response.Status == SD.Status_Approved)
+                {
+                    return View(orderId);
+                }
+            }
+            //redirect to some error page based on status
             return View(orderId);
         }
 
