@@ -5,6 +5,7 @@ using Mango.Services.CouponAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace Mango.Services.CouponAPI.Controllers
@@ -110,6 +111,19 @@ namespace Mango.Services.CouponAPI.Controllers
                 await unitOfWork.couponRepository.Create(coupon);
                 await unitOfWork.Save();
 
+                // add coupon in stripe Payment Gateway
+
+
+                var options = new Stripe.CouponCreateOptions
+                {
+                    AmountOff = (long) (coupon.DiscountAmount*100),
+                    Name = coupon.CouponCode,
+                    Currency = "usd",
+                    Id = coupon.CouponCode
+                };
+                var service = new Stripe.CouponService();
+                service.Create(options);
+
                 Coupon couponFromDb = await unitOfWork.couponRepository.Get(filter: x => x.CouponCode.ToLower() == couponCreateDTO.CouponCode.ToLower());
 
                 CouponDTO couponDTO = mapper.Map<CouponDTO>(couponFromDb);
@@ -180,6 +194,10 @@ namespace Mango.Services.CouponAPI.Controllers
                 }
                 unitOfWork.couponRepository.Delete(coupon);
                 await unitOfWork.Save();
+
+                var service = new Stripe.CouponService();
+                service.Delete(coupon.CouponCode);
+
                 return Ok();
             }
             catch (Exception ex)
