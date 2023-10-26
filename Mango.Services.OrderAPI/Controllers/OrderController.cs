@@ -144,12 +144,16 @@ namespace Mango.Services.OrderAPI.Controllers
                     _db.SaveChanges();
 
                     // after created order and payment .. i will add push rewards to "ServiceBus-Topics"
-                    //RewardsDto rewardsDto = new RewardsDto() 
-                    //{
-                    //    UserId = orderHeader.UserId,
-                    //    OrderId = orderHeader.OrderHeaderId,
-                    //    RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal)
-                    //};
+                    RewardsDto rewardsDto = new RewardsDto()
+                    {
+                        UserId = orderHeader.UserId,
+                        OrderId = orderHeader.OrderHeaderId,
+                        RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal) // you will get one rewards .. for any one dollar you payed
+                    };
+
+                    string topicName = _configuration.GetValue<string>("OrderCreatedTopic:ordercreated")!;
+                    await _messageBus.PublishMessage(rewardsDto , topicName);
+
                 }
                 return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
             }
