@@ -5,6 +5,7 @@ using Mango.Services.CouponAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace Mango.Services.CouponAPI.Controllers
@@ -193,6 +194,10 @@ namespace Mango.Services.CouponAPI.Controllers
                 }
                 unitOfWork.couponRepository.Delete(coupon);
                 await unitOfWork.Save();
+
+                var service = new Stripe.CouponService();
+                service.Delete(coupon.CouponCode);
+
                 return Ok();
             }
             catch (Exception ex)
