@@ -142,7 +142,14 @@ namespace Mango.Services.OrderAPI.Controllers
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
                     _db.SaveChanges();
-                    
+
+                    // after created order and payment .. i will add push rewards to "ServiceBus-Topics"
+                    //RewardsDto rewardsDto = new RewardsDto() 
+                    //{
+                    //    UserId = orderHeader.UserId,
+                    //    OrderId = orderHeader.OrderHeaderId,
+                    //    RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal)
+                    //};
                 }
                 return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
             }

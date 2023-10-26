@@ -33,11 +33,15 @@ namespace Mango.Services.RewardAPI.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RewardsActivity")
+                    b.Property<int>("RewardsActivity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RewardsDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
