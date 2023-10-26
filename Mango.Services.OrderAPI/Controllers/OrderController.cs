@@ -151,11 +151,12 @@ namespace Mango.Services.OrderAPI.Controllers
                         RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal) // you will get one rewards .. for any one dollar you payed
                     };
 
-                    string topicName = _configuration.GetValue<string>("OrderCreatedTopic:ordercreated")!;
+                    string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic")!;
                     await _messageBus.PublishMessage(rewardsDto , topicName);
 
                 }
                 return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
+
             }
             catch (Exception ex)
             {
