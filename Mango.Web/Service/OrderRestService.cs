@@ -5,6 +5,7 @@ using RestSharp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Security.Policy;
 using Newtonsoft.Json;
+using System;
 
 namespace Mango.Web.Service
 {
@@ -51,6 +52,71 @@ namespace Mango.Web.Service
             var resposne = await _restClient.ExecutePostAsync<StripeRequestDto>(request);
 
             return resposne.Data;
+        }
+
+        public async Task<IEnumerable<OrderHeaderDto>> GetAllOrders(string? userId, bool withBearer = true)
+        {
+            var request = new RestRequest($"/api/order/GetOrders/{userId}", Method.Get);
+
+
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
+            //// one way 
+            var response = await _restClient.ExecuteGetAsync<IEnumerable<OrderHeaderDto>>(request);
+
+            if (response.Data == null)
+            {
+                Console.WriteLine($"ERROR: {response.ErrorException?.Message}");
+            }
+
+            return response.Data!;
+        }
+
+        public async Task<OrderHeaderDto> GetOrderById(int id, bool withBearer = true)
+        {
+            var request = new RestRequest($"/api/order/GetOrder/{id}", Method.Get);
+
+
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
+            //// one way 
+            var response = await _restClient.ExecuteGetAsync<OrderHeaderDto>(request);
+
+            if (response.Data == null)
+            {
+                Console.WriteLine($"ERROR: {response.ErrorException?.Message}");
+            }
+
+            return response.Data!;
+        }
+
+        public async Task<string> UpdateOrderStatus(int orderId, string newStatus, bool withBearer = true)
+        {
+            var request = new RestRequest($"/api/order/UpdateOrderStatus/{orderId}", Method.Put);
+
+            request.AddJsonBody(newStatus);
+            request.AddHeader("Accept", "application/json");
+
+            if (withBearer)
+            {
+                request.AddHeader("Authorization", $"Bearer {_tokenProvider.GetToken()}"); // read token from method parameter
+            }
+
+
+            var response = await _restClient.ExecutePutAsync<string>(request);
+
+            if (!response.IsSuccessful)
+            {
+                Console.WriteLine($"ERROR: {response.ErrorException?.Message}");
+            }
+
+            return response.Data!;
         }
 
         public async Task<OrderHeaderDto> ValidateStripeSession(int orderHeaderId, bool withBearer = true)
