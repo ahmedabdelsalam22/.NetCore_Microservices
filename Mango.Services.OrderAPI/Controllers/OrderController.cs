@@ -37,7 +37,7 @@ namespace Mango.Services.OrderAPI.Controllers
 
         [Authorize]
         [HttpGet("GetOrders")]
-        public ActionResult<IEnumerable<OrderHeaderDto>> Get(string? userId = "")
+        public ActionResult<IEnumerable<OrderHeaderDto>>? Get(string? userId = "")
         {
             try
             {
@@ -58,7 +58,20 @@ namespace Mango.Services.OrderAPI.Controllers
             }
         }
 
-
+        [Authorize]
+        [HttpGet("GetOrder/{id}")]
+        public ActionResult<OrderHeaderDto>? Get(int id)
+        {
+            try
+            {
+                OrderHeader orderHeader = _db.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
+                return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
 
 
         [Authorize]
