@@ -1,5 +1,5 @@
 ﻿
-using Mango.Services.RewardAPI.Message;
+using Mango.Services.RewardAPI.Models;
 
 namespace Mango.Services.RewardAPI.Service
 {
