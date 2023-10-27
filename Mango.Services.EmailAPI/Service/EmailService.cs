@@ -10,11 +10,11 @@ namespace Mango.Services.EmailAPI.Service
 {
     public class EmailService : IEmailService
     {
-        private DbContextOptions<ApplicationDbContext> _dboptions;
+        private DbContextOptions<ApplicationDbContext> _dbOptions;
 
-        public EmailService(DbContextOptions<ApplicationDbContext> dboptions)
+        public EmailService(DbContextOptions<ApplicationDbContext> dbOptions)
         {
-            this._dboptions = dboptions;
+            this._dbOptions = dbOptions;
         }
 
         public async Task EmailCartAndLog(CartDto cartDto)
@@ -53,7 +53,7 @@ namespace Mango.Services.EmailAPI.Service
                     EmailSent = DateTime.Now,
                     Message = message
                 };
-                await using var _db = new ApplicationDbContext(_dboptions);
+                await using var _db = new ApplicationDbContext(_dbOptions);
                 await _db.EmailLoggers.AddAsync(emailLog);
                 await _db.SaveChangesAsync();
                 return true;
