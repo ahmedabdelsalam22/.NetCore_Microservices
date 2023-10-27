@@ -8,6 +8,7 @@ using Mango.Services.OrderAPI.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
 
@@ -32,6 +33,33 @@ namespace Mango.Services.OrderAPI.Controllers
             _mapper = mapper;
             _configuration = configuration;
         }
+
+
+        [Authorize]
+        [HttpGet("GetOrders")]
+        public ActionResult<IEnumerable<OrderHeaderDto>> Get(string? userId = "")
+        {
+            try
+            {
+                IEnumerable<OrderHeader> objList;
+                if (User.IsInRole(SD.RoleAdmin))
+                {
+                    objList = _db.OrderHeaders.Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).ToList();
+                }
+                else
+                {
+                    objList = _db.OrderHeaders.Include(u => u.OrderDetails).Where(u => u.UserId == userId).OrderByDescending(u => u.OrderHeaderId).ToList();
+                }
+
+                return Ok(_mapper.Map<IEnumerable<OrderHeaderDto>>(objList));            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+
+
 
         [Authorize]
         [HttpPost("CreateOrder")]
