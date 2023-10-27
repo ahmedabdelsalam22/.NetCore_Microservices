@@ -36,8 +36,8 @@ namespace Mango.Services.OrderAPI.Controllers
 
 
         [Authorize]
-        [HttpGet("GetOrders")]
-        public ActionResult<IEnumerable<OrderHeaderDto>>? Get(string? userId = "")
+        [HttpGet("GetOrders/{userId}")]
+        public ActionResult<IEnumerable<OrderHeaderDto>>? GetAllOrders(string? userId = "")
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Mango.Services.OrderAPI.Controllers
 
         [Authorize]
         [HttpGet("GetOrder/{id}")]
-        public ActionResult<OrderHeaderDto>? Get(int id)
+        public ActionResult<OrderHeaderDto>? GetOrderById(int id)
         {
             try
             {
