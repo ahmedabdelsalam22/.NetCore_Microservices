@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [Authorize]
     [ApiController]
     public class CouponAPIController : ControllerBase
@@ -45,7 +45,7 @@ namespace Mango.Services.CouponAPI.Controllers
                 return BadRequest(new List<CouponDTO>());
             }
         }
-        [HttpGet("{couponId}")]
+        [HttpGet("coupon/{couponId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,7 +67,7 @@ namespace Mango.Services.CouponAPI.Controllers
                 return BadRequest(new CouponDTO());
             }
         } 
-        [HttpGet("couponCode/{couponCode}")]
+        [HttpGet("coupon/couponCode/{couponCode}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -90,7 +90,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost("coupon/create")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -135,7 +135,7 @@ namespace Mango.Services.CouponAPI.Controllers
                 return BadRequest(new CouponDTO());
             }
         }
-        [HttpPut("update/{couponId}")]
+        [HttpPut("coupon/update/{couponId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -175,7 +175,7 @@ namespace Mango.Services.CouponAPI.Controllers
                 return BadRequest(new CouponDTO());
             }
         }
-        [HttpDelete("delete/{couponId}")]
+        [HttpDelete("coupon/delete/{couponId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
