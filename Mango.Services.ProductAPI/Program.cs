@@ -50,7 +50,7 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-builder.AddAppAuthintication();
+//builder.AddAppAuthintication();
 
 builder.Services.AddAuthorization();
 
