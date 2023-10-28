@@ -1,8 +1,8 @@
-using Mango.Services.CouponAPI.Extensions;
 using Mango.Services.CouponAPI.Repository;
 using Mango.Services.CouponAPI.Repository.IRepository;
 using Mango.Services.ProductAPI;
 using Mango.Services.ProductAPI.Data;
+using Mango.Services.ProductAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -50,7 +50,8 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-//builder.AddAppAuthintication();
+builder.AddAppAuthintication();
+
 
 builder.Services.AddAuthorization();
 

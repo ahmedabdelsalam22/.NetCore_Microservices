@@ -7,6 +7,7 @@ using Mango.Services.ShoppingCartAPI.Utility;
 using Mango.Services.ShoppingCartAPI.Services.IServices;
 using Mango.Services.ShoppingCartAPI.Services;
 using Mango.MessageBus;
+using Mango.Services.ShoppingCartAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,7 @@ builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 
 builder.Services.AddScoped<IMessageBus,MessageBus>();
 
+builder.AddAppAuthintication();
 
 
 builder.Services.AddAuthorization();
