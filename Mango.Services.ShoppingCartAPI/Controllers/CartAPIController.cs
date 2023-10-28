@@ -7,6 +7,7 @@ using Mango.Services.ShoppingCartAPI.Models.Dtos;
 using Mango.Services.ShoppingCartAPI.Models.DTOS;
 using Mango.Services.ShoppingCartAPI.Services.IServices;
 using Mango.Services.ShoppingCartAPI.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             _configuration = configuration;
         }
 
-
+        [Authorize]
         [HttpGet("getCart/{userId}")]
         public async Task<ActionResult> GetCart(string userId)
         {
@@ -75,7 +76,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-
+        [Authorize]
         [HttpPost("cartUpdsert")]
         public async Task<IActionResult> CartUpsert(CartDto cartDto)
         {
@@ -126,6 +127,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("RemoveCart")]
         public async Task<IActionResult> RemoveCart([FromBody] int cartDetailsId)
         {
@@ -154,6 +156,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("ApplyCoupon")]
         public async Task<object> ApplyCoupon([FromBody] CartDto cartDto)
         {
@@ -171,6 +174,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("EmailCartRequest")]
         public async Task<object> EmailCartRequest([FromBody] CartDto cartDto)
         {
@@ -185,6 +189,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [Authorize]
         [HttpPost("RemoveCoupon")]
         public async Task<object> RemoveCoupon([FromBody] CartDto cartDto)
         {
