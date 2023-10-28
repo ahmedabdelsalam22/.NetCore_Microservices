@@ -1,4 +1,3 @@
-using Mango.Services.ShoppingCartAPI.Extensions;
 using Mango.Services.ShoppingCartAPI;
 using Mango.Services.ShoppingCartAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -61,7 +60,6 @@ builder.Services.AddScoped<ICouponRestService, CouponRestService>();
 builder.Services.AddScoped<IMessageBus,MessageBus>();
 
 
-builder.AddAppAuthintication();
 
 builder.Services.AddAuthorization();
 
