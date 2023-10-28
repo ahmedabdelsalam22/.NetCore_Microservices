@@ -1,5 +1,3 @@
-# .NetCore_Microservices
-
 # Microservices App
 
 This repository contains a microservices application built using .NET Core 7. The application consists of various services that work together to provide different functionalities. The services included in this application are:
@@ -72,8 +70,5 @@ If you want to contribute to this microservices application, you can follow the 
 
 Please ensure that your contributions align with the coding standards and guidelines followed in this project.
 
-## License
-
-This microservices application is licensed under the [MIT License](LICENSE). Feel free to modify and distribute it as per the license terms.
 
 #Ahmed_Abd_Elsalam
